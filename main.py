@@ -47,6 +47,10 @@ gong_button_rect.center = (360, 400)
 chi_button_rect.center = (440, 400)
 hu_button_rect.center = (520, 400)
 
+# images
+Tile_backing = pygame.image.load('./mahjong-tiles/back.jpg')
+screen.blit(Tile_backing,(100,100))
+pygame.display.update()
 # Card class definition
 class Tile:
     def __init__(self, suit_type, value):
