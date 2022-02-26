@@ -48,6 +48,11 @@ class Tile:
     def __init__(self, suit_type, value):
         self.suit_type = suit_type
         self.value = value
+    def __eq__(self, other):
+        return (self.suit_type == other.suit_type) and (self.value == other.value)
+
+    def __lt__(self, other):
+        return self.suit_type < other.suit_type
 
 def create_tiles(suit_values):
     all_tiles = []
@@ -74,6 +79,7 @@ def distribute_tiles(all_tiles):
         all_tiles = all_tiles[16:]
     for i in range(4):
         players[i].append(all_tiles[i])
+        players[i] = sort_tiles(players[i])
     all_tiles = all_tiles[4:]
     return players, all_tiles
 
@@ -83,5 +89,10 @@ def print_player1(players):
         tile = players[0][i]
         player1.append(tile.suit_type + tile.value)
     print(player1)
+
+def sort_tiles(player_tiles):
+    tiles_sorted = sorted(player_tiles, key = lambda x: (x.suit_type, x.value), reverse = False)
+    return tiles_sorted
+
 
     
