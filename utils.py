@@ -1,15 +1,23 @@
 import random
 import pygame
+<<<<<<< HEAD
 from pygame.locals import K_ESCAPE, KEYDOWN, QUIT
+=======
+>>>>>>> caa24aad064d96742bf5224a8c49cc4f46328930
 
 
 def create_screen():
     # Create the screen object
-    # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
+    # The size is determined by the constant screen_width and screen_height
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     display_info = pygame.display.Info()
+<<<<<<< HEAD
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
+=======
+    screen_height = display_info.current_h
+    screen_width = display_info.current_w
+>>>>>>> caa24aad064d96742bf5224a8c49cc4f46328930
     GREEN = (0, 105, 53)
     WHITE = (255, 255, 255)
     screen.fill(GREEN)
@@ -45,7 +53,8 @@ def create_screen():
     gong_button_rect.center = (360, 400)
     chi_button_rect.center = (440, 400)
     hu_button_rect.center = (520, 400)
-    return screen, SCREEN_HEIGHT, SCREEN_WIDTH
+    return screen, screen_height, screen_width
+
 
 
 # Card class definition
@@ -92,10 +101,13 @@ def distribute_tiles(all_tiles):
     return players, all_tiles
 
 
+<<<<<<< HEAD
 def print_tiles(tiles_list):
+=======
+def print_tiles_as_str(tiles_list):
+>>>>>>> caa24aad064d96742bf5224a8c49cc4f46328930
     tiles_to_print = []
-    for i in range(len(tiles_list)):
-        tile = tiles_list[i]
+    for tile in tiles_list:
         tiles_to_print.append(tile.suit_type + tile.value)
     print(tiles_to_print)
 
@@ -127,8 +139,8 @@ def check_for_chi(player_tiles, discarded_tile):
 
 def check_for_peng(player_tiles, discarded_tile):
     count = 0
-    for i in range(len(player_tiles)):
-        if player_tiles[i] == discarded_tile:
+    for tile in player_tiles:
+        if tile == discarded_tile:
             count += 1
     if count >= 3:
         return True
@@ -138,8 +150,8 @@ def check_for_peng(player_tiles, discarded_tile):
 
 def check_for_gong(player_tiles, discarded_tile):
     count = 0
-    for i in range(len(player_tiles)):
-        if player_tiles[i] == discarded_tile:
+    for tile in player_tiles:
+        if tile == discarded_tile:
             count += 1
     if count == 4:
         return True
@@ -170,7 +182,7 @@ def check_for_pinghu(player_tiles):
     count = 0
     while len(tiles_to_check) != 0 and count < 5:
         if len(tiles_to_check) == 2:
-            if check_for_pair:
+            if check_for_pair(tiles_to_check[0], tiles_to_check[1]):
                 return True
             else:
                 return False
@@ -195,7 +207,7 @@ def check_for_pengpenghu(player_tiles):
     count = 0
     while len(tiles_to_check) != 0 and count < 5:
         if len(tiles_to_check) == 2:
-            if check_for_pair:
+            if check_for_pair(tiles_to_check[0], tiles_to_check[1]):
                 return True
             else:
                 return False
