@@ -54,6 +54,16 @@ print(len(all_tiles))
 # Variable to keep the main loop running
 running = True
 
+# Tile print
+# not the best
+for i in range(13):
+    tiles = players[0][i]
+    players_tiles = pygame.image.load('./mahjong-tiles/1c.jpg')
+    players_tiles = pygame.transform.scale(players_tiles,(tile_width,tile_height))
+    screen.blit(players_tiles,(100+i*tile_width,SCREEN_HEIGHT-100))
+
+pygame.display.update()
+
 # for mouse
 # Mouse_x, Mouse_y = pygame.mouse.get_pos()
 # key = pygame.key.get_pressed()
