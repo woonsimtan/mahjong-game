@@ -53,29 +53,59 @@ class Tile:
         self.suit_type = suit_type
         self.value = value
 
-# The type of suit
-suits = ["Numbers", "Circles", "Bamboo", "Dragon", "Wind"]
- 
 # The type of card
-tiles = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "N", "S", "W", "E", "B", "Z", "F"]
- 
-# The card value
-tile_values = {"1": 1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, 
-                "E":10, "S": 11, "W":12, "N":13, 
-                "B":20, "Z":21, "F":22}
 # TODO: add flowers
+suit_values = {
+    "Numbers": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    "Circles": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    "Bamboo": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    "Wind": ["N", "S", "W", "E"],
+    "Dragon": ["B", "Z", "F"],
+}
+# The card value - for counting points
+# tile_values = {
+#     "1": 1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, 
+#     "E":10, "S": 11, "W":12, "N":13, 
+#     "B":20, "Z":21, "F":22
+# }
+
 
 # The deck of cards - List of Objects
 all_tiles = []
  
 # Loop for every type of suit
-for suit in suits:
+for key in suit_values.keys():
     # Loop for every type of card in a suit
-    for tile in tiles:
+    for i in suit_values[key]:
         # Add 4 of each tile
-        for i in range(4):
+        for j in range(4):
             # Adding the card to the deck
-            all_tiles.append(Tile(suit, tile))
+            all_tiles.append(Tile(key, i))
+
+# shuffle tiles
+import random
+random.shuffle(all_tiles)
+
+# set up players
+players = [[], [], [], []]
+
+# distribute tiles to players
+for i in range (3):
+    for j in range(4):
+        for k in range(4):
+            players[j].append(all_tiles[j*4 + k])
+    all_tiles = all_tiles[16:]
+for i in range(4):
+    players[i].append(all_tiles[i])
+all_tiles = all_tiles[4:]
+
+def print_player1():
+    player1 = []
+    for i in range(13):
+        tile = players[0][i]
+        player1.append(tile.suit_type + tile.value)
+    print(player1)
+# print_player1()
 
 
 
