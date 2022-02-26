@@ -1,31 +1,34 @@
-
 # import libraries
+import pygame
+from pygame.locals import K_ESCAPE, KEYDOWN, QUIT
+
 import utils
 from utils import Tile
-import pygame
-from pygame.locals import (K_ESCAPE, KEYDOWN, QUIT)
 
 # initialise game
 pygame.init()
-screen, SCREEN_HEIGHT, SCREEN_WIDTH = utils.create_screen()
+screen, screen_height, screen_width = utils.create_screen()
 
 # images
 # Tiles
 # Tile naming convention
-""" For the numbered suits the image is named with a number then the letter of the suit """
+""" For the numbered suits the image named with number + suit letter """
 """ For the winds and dragons the image is saved a singular letter """
 # aspect ratio that was ideal was 600 to 45 and 800 to 35
 
-image_ratio_w = 35.0/800
-image_ratio_h = 60.0/600
+IMAGE_RATIO_W = 35.0 / 800
+IMAGE_RATIO_H = 60.0 / 600
 
-tile_backing = pygame.image.load('./mahjong-tiles/back.jpg')
-#tile_width,tile_height = tile_backing.get_size()
-tile_width = SCREEN_WIDTH*image_ratio_w
-tile_height = SCREEN_HEIGHT*image_ratio_h
-tile_backing = pygame.transform.scale(tile_backing,(tile_width,tile_height))
+tile_backing = pygame.image.load("./mahjong-tiles/back.jpg")
+# tile_width,tile_height = tile_backing.get_size()
+tile_width = screen_width * IMAGE_RATIO_W
+tile_height = screen_height * IMAGE_RATIO_H
+tile_backing = pygame.transform.scale(tile_backing, (tile_width, tile_height))
 for i in range(18):
-    screen.blit(tile_backing,(SCREEN_WIDTH/2-tile_width*9+i*tile_width,SCREEN_HEIGHT/7))
+    screen.blit(
+        tile_backing,
+        (screen_width / 2 - tile_width * 9 + i * tile_width, screen_height / 7),
+    )
 
 pygame.display.update()
 
@@ -41,8 +44,8 @@ suit_values = {
 }
 # The card value - for counting points
 # tile_values = {
-#     "1": 1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, 
-#     "E":10, "S": 11, "W":12, "N":13, 
+#     "1": 1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9,
+#     "E":10, "S": 11, "W":12, "N":13,
 #     "B":20, "Z":21, "F":22
 # }
 
@@ -53,15 +56,23 @@ players, all_tiles = utils.distribute_tiles(all_tiles)
 
 # Player 1 tile display
 # not the best
-image_ratio_w = 50.0/800
-image_ratio_h = 80.0/600
-tile_width = SCREEN_WIDTH*image_ratio_w
-tile_height = SCREEN_HEIGHT*image_ratio_h
+IMAGE_RATIO_W = 50.0 / 800
+IMAGE_RATIO_H = 80.0 / 600
+tile_width = screen_width * IMAGE_RATIO_W
+tile_height = screen_height * IMAGE_RATIO_H
 for i in range(len(players[0])):
     tiles = players[0][i]
-    players_tiles = pygame.image.load('./mahjong-tiles/'+tiles.suit_type + tiles.value+'.jpg')
-    players_tiles = pygame.transform.scale(players_tiles,(tile_width,tile_height))
-    screen.blit(players_tiles,(SCREEN_WIDTH/2 - tile_width*6.5+ i*tile_width,SCREEN_HEIGHT-tile_height-40))
+    players_tiles = pygame.image.load(
+        "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
+    )
+    players_tiles = pygame.transform.scale(players_tiles, (tile_width, tile_height))
+    screen.blit(
+        players_tiles,
+        (
+            screen_width / 2 - tile_width * 6.5 + i * tile_width,
+            screen_height - tile_height - 40,
+        ),
+    )
 
 pygame.display.update()
 
@@ -83,23 +94,23 @@ print(utils.check_for_win(hu_tiles))
 #     tiles = ping_hu_tiles[i]
 #     players_tiles = pygame.image.load('./mahjong-tiles/'+tiles.suit_type + tiles.value+'.jpg')
 #     players_tiles = pygame.transform.scale(players_tiles,(tile_width,tile_height))
-#     screen.blit(players_tiles,(SCREEN_WIDTH/2.0 - tile_width*6.5+ i*tile_width,SCREEN_HEIGHT-tile_height-40))
+#     screen.blit(players_tiles,(screen_width/2.0 - tile_width*6.5+ i*tile_width,screen_height-tile_height-40))
 
 # pygame.display.update()
 # Variable to keep the main loop running
-running = True
+RUNNING = True
 
 # Main loop
-while running:
+while RUNNING:
     # Tracking the mouse movements
     mouse = pygame.mouse.get_pos()
-    # Loop events occuring inside the game window 
+    # Loop events occuring inside the game window
     for event in pygame.event.get():
         # Did the user hit a key?
         if event.type == KEYDOWN:
             # Was it the Escape key? If so, stop the loop.
             if event.key == K_ESCAPE:
-                running = False
+                RUNNING = False
         # Did the user click the window close button? If so, stop the loop.
         elif event.type == QUIT:
-            running = False
+            RUNNING = False
