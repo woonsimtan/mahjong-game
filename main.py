@@ -1,6 +1,7 @@
 
 # import libraries
 import utils
+from utils import Tile
 import pygame
 from pygame.locals import (K_ESCAPE, KEYDOWN, QUIT)
 
@@ -45,41 +46,21 @@ all_tiles, discarded_tiles = utils.create_tiles(suit_values)
 # set up players
 players, all_tiles = utils.distribute_tiles(all_tiles)
 
-
-# Card class definition
-class Tile:
-    def __init__(self, suit_type, value):
-        self.suit_type = suit_type
-        self.value = value
-
-    def __eq__(self, other):
-        return (self.suit_type == other.suit_type) and (self.value == other.value)
-
-    def __lt__(self, other):
-        return self.suit_type < other.suit_type
-
-
 # check statements
-utils.print_tiles(players[0])
-print(len(all_tiles))
-print(utils.check_for_chi(players[0], Tile("Circles", "3")))
+ping_hu_tiles = []
+for i in range(4):
+    ping_hu_tiles.append(Tile("Bamboo", "1"))
+    ping_hu_tiles.append(Tile("Bamboo", "2"))
+    ping_hu_tiles.append(Tile("Bamboo", "4"))
+ping_hu_tiles.append(Tile("Bamboo", "5"))
+ping_hu_tiles.append(Tile("Bamboo", "5"))
+print(utils.check_for_pinghu(ping_hu_tiles))
+# utils.print_tiles(players[0])
+# print(len(all_tiles))
+# print(utils.check_for_chi(players[0], Tile("Circles", "3")))
 
 # Variable to keep the main loop running
 running = True
-
-# Tile print
-# not the best
-for i in range(13):
-    tiles = players[0][i]
-    players_tiles = pygame.image.load('./mahjong-tiles/'+tiles.suit_type + tiles.value+'.jpg')
-    players_tiles = pygame.transform.scale(players_tiles,(tile_width,tile_height))
-    screen.blit(players_tiles,(100+i*tile_width,pygame.display.Info().current_h-100))
-
-pygame.display.update()
-
-# for mouse
-# Mouse_x, Mouse_y = pygame.mouse.get_pos()
-# key = pygame.key.get_pressed()
 
 # Main loop
 while running:
