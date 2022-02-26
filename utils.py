@@ -131,7 +131,7 @@ def check_for_gong(player_tiles, discarded_tile):
 
 def check_for_win(player_tiles):
     ping_hu = check_for_pinghu(player_tiles)
-    peng_peng_hu = False
+    peng_peng_hu = check_for_pengpenghu(player_tiles)
     ji_hu = False
     ban_se = False
     qing_yi_se = False
@@ -161,5 +161,22 @@ def check_for_pinghu(player_tiles):
                 tiles_to_check.remove(tile1)
                 tiles_to_check.remove(tile2)
                 tiles_to_check.remove(tile3)
+        count += 1
+    return False
+
+def check_for_pengpenghu(player_tiles):
+    tiles_to_check = player_tiles
+    count = 0
+    while len(tiles_to_check) != 0 and count < 5:
+        if len(tiles_to_check) == 2:
+            if check_for_pair:
+                return True
+            else:
+                return False
+        else:
+            tile = tiles_to_check[0]
+            if tiles_to_check.count(tile) == 3:
+                for i in range(3):
+                    tiles_to_check.remove(tile)
         count += 1
     return False
