@@ -44,7 +44,7 @@ def create_screen():
     gong_button_rect.center = (360, 400)
     chi_button_rect.center = (440, 400)
     hu_button_rect.center = (520, 400)
-    return screen
+    return screen, SCREEN_HEIGHT, SCREEN_WIDTH
 
 # Card class definition
 class Tile:

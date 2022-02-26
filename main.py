@@ -7,7 +7,7 @@ from pygame.locals import (K_ESCAPE, KEYDOWN, QUIT)
 
 # initialise game
 pygame.init()
-screen = utils.create_screen()
+screen, SCREEN_HEIGHT, SCREEN_WIDTH = utils.create_screen()
 
 # images
 # Tiles
@@ -16,11 +16,16 @@ screen = utils.create_screen()
 """ For the winds and dragons the image is saved a singular letter """
 # aspect ratio that was ideal was 600 to 45 and 800 to 35
 
+image_ratio_w = 35.0/800
+image_ratio_h = 60.0/600
+
 tile_backing = pygame.image.load('./mahjong-tiles/back.jpg')
-tile_width,tile_height = tile_backing.get_size()
+#tile_width,tile_height = tile_backing.get_size()
+tile_width = SCREEN_WIDTH*image_ratio_w
+tile_height = SCREEN_HEIGHT*image_ratio_h
 tile_backing = pygame.transform.scale(tile_backing,(tile_width,tile_height))
 for i in range(18):
-    screen.blit(tile_backing,(100+i*tile_width,100))
+    screen.blit(tile_backing,(SCREEN_WIDTH/2-tile_width*9+i*tile_width,SCREEN_HEIGHT/7))
 
 pygame.display.update()
 
@@ -46,6 +51,20 @@ all_tiles, discarded_tiles = utils.create_tiles(suit_values)
 # set up players
 players, all_tiles = utils.distribute_tiles(all_tiles)
 
+# Player 1 tile display
+# not the best
+image_ratio_w = 50.0/800
+image_ratio_h = 80.0/600
+tile_width = SCREEN_WIDTH*image_ratio_w
+tile_height = SCREEN_HEIGHT*image_ratio_h
+for i in range(len(players[0])):
+    tiles = players[0][i]
+    players_tiles = pygame.image.load('./mahjong-tiles/'+tiles.suit_type + tiles.value+'.jpg')
+    players_tiles = pygame.transform.scale(players_tiles,(tile_width,tile_height))
+    screen.blit(players_tiles,(SCREEN_WIDTH/2 - tile_width*6.5+ i*tile_width,SCREEN_HEIGHT-tile_height-40))
+
+pygame.display.update()
+
 # check statements
 hu_tiles = []
 for i in range(3):
@@ -60,7 +79,13 @@ print(utils.check_for_win(hu_tiles))
 # utils.print_tiles(players[0])
 # print(len(all_tiles))
 # print(utils.check_for_chi(players[0], Tile("Circles", "3")))
+# for i in range(14):
+#     tiles = ping_hu_tiles[i]
+#     players_tiles = pygame.image.load('./mahjong-tiles/'+tiles.suit_type + tiles.value+'.jpg')
+#     players_tiles = pygame.transform.scale(players_tiles,(tile_width,tile_height))
+#     screen.blit(players_tiles,(SCREEN_WIDTH/2.0 - tile_width*6.5+ i*tile_width,SCREEN_HEIGHT-tile_height-40))
 
+# pygame.display.update()
 # Variable to keep the main loop running
 running = True
 
