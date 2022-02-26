@@ -126,4 +126,37 @@ def check_for_gong(player_tiles, discarded_tile):
     else:
         return False
 
-    
+def check_for_win(player_tiles):
+    ping_hu = check_for_pinghu(player_tiles)
+    peng_peng_hu = False
+    ji_hu = False
+    ban_se = False
+    qing_yi_se = False
+    yao_jiu = False
+    shisan_yao = False
+    #flower_hu = False
+    win = ping_hu or peng_peng_hu or ji_hu or ban_se or qing_yi_se or yao_jiu or shisan_yao #or flower_hu
+    return win
+
+def check_for_pair(tile1, tile2):
+    return tile1 == tile2
+
+def check_for_pinghu(player_tiles):
+    tiles_to_check = player_tiles
+    count = 0
+    while len(tiles_to_check) != 0 and count < 5:
+        if len(tiles_to_check) == 2:
+            if check_for_pair:
+                return True
+            else:
+                return False
+        else:
+            tile1 = tiles_to_check[0]
+            tile2 = Tile(tile1.suit_type, str(int(tile1.value)+1))
+            tile3 = Tile(tile1.suit_type, str(int(tile1.value)+2))
+            if tile1 in tiles_to_check and tile2 in tiles_to_check and tile3 in tiles_to_check:
+                tiles_to_check.remove(tile1)
+                tiles_to_check.remove(tile2)
+                tiles_to_check.remove(tile3)
+        count += 1
+    return False
