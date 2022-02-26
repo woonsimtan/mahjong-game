@@ -2,10 +2,10 @@ import random
 import pygame
 from pygame.locals import (K_ESCAPE, KEYDOWN, QUIT)
 
-def create_screen(width,  height):
+def create_screen():
 # Create the screen object
 # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
-    screen = pygame.display.set_mode((width, height))
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     GREEN = (0 ,105, 53)
     WHITE = (255, 255, 255)
     screen.fill(GREEN)
@@ -48,6 +48,7 @@ class Tile:
     def __init__(self, suit_type, value):
         self.suit_type = suit_type
         self.value = value
+
     def __eq__(self, other):
         return (self.suit_type == other.suit_type) and (self.value == other.value)
 

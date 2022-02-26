@@ -1,14 +1,12 @@
 
-# import and initialise python
+# import libraries
 import utils
 import pygame
 from pygame.locals import (K_ESCAPE, KEYDOWN, QUIT)
-pygame.init()
 
-# Define constants for the screen width and height
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-screen = utils.create_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
+# initialise game
+pygame.init()
+screen = utils.create_screen()
 
 # images
 # Tiles
@@ -70,7 +68,9 @@ pygame.display.update()
 
 # Main loop
 while running:
-    # Look at every event in the queue
+    # Tracking the mouse movements
+    mouse = pygame.mouse.get_pos()
+    # Loop events occuring inside the game window 
     for event in pygame.event.get():
         # Did the user hit a key?
         if event.type == KEYDOWN:
