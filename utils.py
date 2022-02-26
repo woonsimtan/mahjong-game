@@ -3,9 +3,12 @@ import pygame
 from pygame.locals import (K_ESCAPE, KEYDOWN, QUIT)
 
 def create_screen():
-# Create the screen object
-# The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
+    # Create the screen object
+    # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    display_info = pygame.display.Info()   
+    SCREEN_HEIGHT = display_info.current_h
+    SCREEN_WIDTH = display_info.current_w
     GREEN = (0 ,105, 53)
     WHITE = (255, 255, 255)
     screen.fill(GREEN)
