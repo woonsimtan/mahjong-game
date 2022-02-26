@@ -135,17 +135,16 @@ def check_for_win(player_tiles):
     ji_hu = False
     ban_se = False
     qing_yi_se = False
-    yao_jiu = False
     shisan_yao = False
     #flower_hu = False
-    win = ping_hu or peng_peng_hu or ji_hu or ban_se or qing_yi_se or yao_jiu or shisan_yao #or flower_hu
+    win = ping_hu or peng_peng_hu or ji_hu or ban_se or qing_yi_se or shisan_yao #or flower_hu
     return win
 
 def check_for_pair(tile1, tile2):
     return tile1 == tile2
 
 def check_for_pinghu(player_tiles):
-    tiles_to_check = player_tiles
+    tiles_to_check = player_tiles.copy()
     count = 0
     while len(tiles_to_check) != 0 and count < 5:
         if len(tiles_to_check) == 2:
@@ -165,7 +164,7 @@ def check_for_pinghu(player_tiles):
     return False
 
 def check_for_pengpenghu(player_tiles):
-    tiles_to_check = player_tiles
+    tiles_to_check = player_tiles.copy()
     count = 0
     while len(tiles_to_check) != 0 and count < 5:
         if len(tiles_to_check) == 2:
@@ -179,4 +178,12 @@ def check_for_pengpenghu(player_tiles):
                 for i in range(3):
                     tiles_to_check.remove(tile)
         count += 1
+    return False
+
+def check_for_yaojiu(player_tiles):
+    if check_for_pengpenghu(player_tiles):
+        for i in range(14):
+            if int(player_tiles[i].value) != 1 and int(player_tiles[i].value) != 9:
+                return False
+        return True
     return False
