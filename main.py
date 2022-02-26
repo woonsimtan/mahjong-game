@@ -48,14 +48,16 @@ all_tiles, discarded_tiles = utils.create_tiles(suit_values)
 players, all_tiles = utils.distribute_tiles(all_tiles)
 
 # check statements
-ping_hu_tiles = []
-for i in range(4):
-    ping_hu_tiles.append(Tile("Bamboo", "1"))
-    ping_hu_tiles.append(Tile("Bamboo", "2"))
-    ping_hu_tiles.append(Tile("Bamboo", "4"))
-ping_hu_tiles.append(Tile("Bamboo", "5"))
-ping_hu_tiles.append(Tile("Bamboo", "5"))
-print(utils.check_for_pinghu(ping_hu_tiles))
+hu_tiles = []
+for i in range(3):
+    hu_tiles.append(Tile("Bamboo", "1"))
+    hu_tiles.append(Tile("Bamboo", "2"))
+    hu_tiles.append(Tile("Bamboo", "4"))
+    hu_tiles.append(Tile("Bamboo", "6"))
+hu_tiles.append(Tile("Bamboo", "5"))
+hu_tiles.append(Tile("Bamboo", "5"))
+print(utils.check_for_pengpenghu(hu_tiles))
+print(utils.check_for_win(hu_tiles))
 # utils.print_tiles(players[0])
 # print(len(all_tiles))
 # print(utils.check_for_chi(players[0], Tile("Circles", "3")))
