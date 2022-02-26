@@ -48,9 +48,23 @@ chi_button_rect.center = (440, 400)
 hu_button_rect.center = (520, 400)
 
 # images
+# Tiles
+# Tile naming convention
+""" For the numbered suits the image is named with a number then the letter of the suit """
+""" For the winds and dragons the image is saved a singular letter """
+
+tile_height = 45
+tile_width = 35
 Tile_backing = pygame.image.load('./mahjong-tiles/back.jpg')
-screen.blit(Tile_backing,(100,100))
+Tile_backing = pygame.transform.scale(Tile_backing,(tile_width,tile_height))
+# screen.blit(Tile_backing,(100,100))
+for i in range(18):
+    screen.blit(Tile_backing,(100+i*tile_width,100))
+
+
 pygame.display.update()
+
+
 # Card class definition
 class Tile:
     def __init__(self, suit_type, value):
