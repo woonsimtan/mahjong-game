@@ -32,6 +32,7 @@ suit_values = {
     "Bamboo": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
     "Wind": ["N", "S", "W", "E"],
     "Dragon": ["B", "Z", "F"],
+    # "Flower": [["1", "2", "3", "4", "5", "6", "7", "8"]
 }
 # The card value - for counting points
 # tile_values = {
@@ -41,13 +42,28 @@ suit_values = {
 # }
 
 # The mahjong tiles - List of Objects
-all_tiles = utils.create_tiles(suit_values)
+all_tiles, discarded_tiles = utils.create_tiles(suit_values)
 # set up players
 players, all_tiles = utils.distribute_tiles(all_tiles)
 
+
+# Card class definition
+class Tile:
+    def __init__(self, suit_type, value):
+        self.suit_type = suit_type
+        self.value = value
+
+    def __eq__(self, other):
+        return (self.suit_type == other.suit_type) and (self.value == other.value)
+
+    def __lt__(self, other):
+        return self.suit_type < other.suit_type
+
+
 # check statements
-utils.print_player1(players)
+utils.print_tiles(players[0])
 print(len(all_tiles))
+print(utils.check_for_chi(players[0], Tile("Circles", "3")))
 
 # Variable to keep the main loop running
 running = True

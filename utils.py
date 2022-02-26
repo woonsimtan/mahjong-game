@@ -68,7 +68,7 @@ def create_tiles(suit_values):
 
     # shuffle tiles
     random.shuffle(all_tiles)
-    return all_tiles
+    return all_tiles, []
 
 def distribute_tiles(all_tiles):
     players = [[],[],[],[]]
@@ -84,16 +84,46 @@ def distribute_tiles(all_tiles):
     all_tiles = all_tiles[4:]
     return players, all_tiles
 
-def print_player1(players):
-    player1 = []
-    for i in range(13):
-        tile = players[0][i]
-        player1.append(tile.suit_type + tile.value)
-    print(player1)
+def print_tiles(tiles_list):
+    tiles_to_print = []
+    for i in range(len(tiles_list)):
+        tile = tiles_list[i]
+        tiles_to_print.append(tile.suit_type + tile.value)
+    print(tiles_to_print)
 
 def sort_tiles(player_tiles):
     tiles_sorted = sorted(player_tiles, key = lambda x: (x.suit_type, x.value), reverse = False)
     return tiles_sorted
 
+def check_for_chi(player_tiles, discarded_tile):
+    wanted_tiles = []
+    for i in range(5):
+        wanted_tiles.append(Tile(discarded_tile.suit_type, str(int(discarded_tile.value) - 2 + i)))
+    new_tile_set = player_tiles
+    new_tile_set.append(discarded_tile)
+    for i in range(3):
+        if (wanted_tiles[i] in new_tile_set) and (wanted_tiles[i+1] in new_tile_set) and (wanted_tiles[i+2] in new_tile_set):
+            return True
+    return False
+
+def check_for_peng(player_tiles, discarded_tile):
+    count = 0
+    for i in range(len(player_tiles)):
+        if player_tiles[i] == discarded_tile:
+            count += 1
+    if count >= 3:
+        return True
+    else:
+        return False
+
+def check_for_gong(player_tiles, discarded_tile):
+    count = 0
+    for i in range(len(player_tiles)):
+        if player_tiles[i] == discarded_tile:
+            count += 1
+    if count == 4:
+        return True
+    else:
+        return False
 
     
