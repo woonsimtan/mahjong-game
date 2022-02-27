@@ -1,9 +1,6 @@
 import random
 import pygame
-<<<<<<< HEAD
 from pygame.locals import K_ESCAPE, KEYDOWN, QUIT
-=======
->>>>>>> caa24aad064d96742bf5224a8c49cc4f46328930
 
 
 def create_screen():
@@ -11,13 +8,8 @@ def create_screen():
     # The size is determined by the constant screen_width and screen_height
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     display_info = pygame.display.Info()
-<<<<<<< HEAD
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
-=======
-    screen_height = display_info.current_h
-    screen_width = display_info.current_w
->>>>>>> caa24aad064d96742bf5224a8c49cc4f46328930
     GREEN = (0, 105, 53)
     WHITE = (255, 255, 255)
     screen.fill(GREEN)
@@ -53,8 +45,7 @@ def create_screen():
     gong_button_rect.center = (360, 400)
     chi_button_rect.center = (440, 400)
     hu_button_rect.center = (520, 400)
-    return screen, screen_height, screen_width
-
+    return screen, SCREEN_HEIGHT, SCREEN_WIDTH
 
 
 # Card class definition
@@ -101,11 +92,7 @@ def distribute_tiles(all_tiles):
     return players, all_tiles
 
 
-<<<<<<< HEAD
-def print_tiles(tiles_list):
-=======
 def print_tiles_as_str(tiles_list):
->>>>>>> caa24aad064d96742bf5224a8c49cc4f46328930
     tiles_to_print = []
     for tile in tiles_list:
         tiles_to_print.append(tile.suit_type + tile.value)
@@ -257,6 +244,8 @@ def print_wall(screen):
     pygame.display.update()
 
 
+# Player 1 tile display
+# not the best
 def player_graphics(players, screen):
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
