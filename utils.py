@@ -232,6 +232,8 @@ def size_values(width, height):
     return tile_width, tile_height
 
 
+"""
+# Attempt at making wall where tiles are taken from
 def print_wall(screen):
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
@@ -248,6 +250,7 @@ def print_wall(screen):
 
     pygame.display.update()
 
+"""
 
 # Player 1 tile display
 # not the best
@@ -262,28 +265,27 @@ def player_graphics(players, screen, pos):
         players_tiles = pygame.image.load(
             "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
         )
-        if i != pos:
-            players_tiles = pygame.transform.scale(
-                players_tiles, (tile_width, tile_height)
-            )
-            screen.blit(
-                players_tiles,
-                (
-                    SCREEN_WIDTH / 2 - tile_width * 6.5 + i * tile_width,
-                    SCREEN_HEIGHT - tile_height - 40,
-                ),
-            )
-        else:
-            players_tiles = pygame.transform.scale(
-                players_tiles, (tile_width, tile_height)
-            )
-            screen.blit(
-                players_tiles,
-                (
-                    SCREEN_WIDTH / 2 - tile_width * 6.5 + i * tile_width,
-                    SCREEN_HEIGHT - tile_height - 60,
-                ),
-            )
+        # Attempt at making the selected tile shift up
+        # if i != pos:
+        #     players_tiles = pygame.transform.scale(
+        #         players_tiles, (tile_width, tile_height)
+        #     )
+        #     screen.blit(
+        #         players_tiles,
+        #         (
+        #             SCREEN_WIDTH / 2 - tile_width * 6.5 + i * tile_width,
+        #             SCREEN_HEIGHT - tile_height - 40,
+        #         ),
+        #     )
+        # else:
+        players_tiles = pygame.transform.scale(players_tiles, (tile_width, tile_height))
+        screen.blit(
+            players_tiles,
+            (
+                SCREEN_WIDTH / 2 - tile_width * 6.5 + i * tile_width,
+                SCREEN_HEIGHT - tile_height - 60,
+            ),
+        )
 
     pygame.display.update()
 
