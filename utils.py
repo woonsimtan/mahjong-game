@@ -6,6 +6,7 @@ from turtle import width
 import pygame
 from pygame.locals import K_ESCAPE, KEYDOWN, QUIT
 from random import randint
+import time
 
 
 def create_screen():
@@ -68,7 +69,7 @@ class Tile:
 
 
 def create_tiles(suit_values):
-    all_tiles = []
+    all_tiles, discarded_tiles = [], []
     # Loop for every type of suit
     for key in suit_values.keys():
         # Loop for every type of card in a suit
@@ -80,7 +81,7 @@ def create_tiles(suit_values):
 
     # shuffle tiles
     random.shuffle(all_tiles)
-    return all_tiles, []
+    return all_tiles, discarded_tiles
 
 
 def distribute_tiles(all_tiles):
@@ -350,14 +351,14 @@ def print_wall(screen):
 
 # Player 1 tile display
 # not the best
-def player_graphics(players, screen, pos):
+def player_graphics(players, screen):
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
     tile_width, tile_height = size_values(50.0, 80.0)
-    for i in range(len(players[0])):
+    for i in range(len(players)):
 
-        tiles = players[0][i]
+        tiles = players[i]
         players_tiles = pygame.image.load(
             "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
         )
@@ -484,18 +485,29 @@ def comp_turn(player_tiles, all_tiles, discarded_tiles, screen):
     return player_tiles, all_tiles, discarded_tiles
 
 
-def player_turn(player_tiles, all_tiles, discarded_tiles, screen):
+def player_turn(player_tiles, all_tiles, discarded_tiles, screen, event):
     player_tiles.append(pick_up_tile(all_tiles))
     player_tiles = sort_tiles(player_tiles)
-    player_graphics(player_tiles, screen, 0)
-    discard_tile = select_discard_tile()
+    player_graphics(player_tiles, screen)
+    discarded_tiles = select_discard_tile(player_tiles, discarded_tiles, screen, event)
+    print(discarded_tiles)
+    discard_tile = discarded_tiles[-1]
     player_tiles.remove(discard_tile)
-    discarded_tiles.append(discard_tile)
     discard_graphics(screen, discard_tile, discarded_tiles)
     return player_tiles, all_tiles, discarded_tiles
 
 
-def select_discard_tile():
-    # TODO: make use of mouse selection
-    return Tile("Bamboo", "1")
+def select_discard_tile(player_tiles, discarded_tiles, screen, event):
 
+    print_tiles_as_str(player_tiles)
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        mouse = pygame.mouse.get_pos()
+        start_time = time.time()
+        timer = start_time + 30
+        if event.button == 1 or timer < time.time():
+            pos = tile_coordinates(mouse, screen)
+            print(player_tiles[pos])
+            discarded_tiles.append(player_tiles[pos])
+            discard_graphics(screen, player_tiles[pos], discarded_tiles)
+            return discarded_tiles
+    return discarded_tiles.append(player_tiles[0])

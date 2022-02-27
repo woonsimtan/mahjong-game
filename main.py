@@ -69,7 +69,7 @@ RUNNING = True
 player = 0
 # pos = 0
 
-utils.player_graphics(players, screen, 0)
+utils.player_graphics(players[0], screen)
 utils.comp_graphics(screen)
 
 # Main loop
@@ -81,7 +81,7 @@ while RUNNING:
     # Loop events occuring inside the game window
     for event in pygame.event.get():
         if event.type == KEYDOWN:
-            if event.key = pygame.K_ESCAPE:
+            if event.key == pygame.K_ESCAPE:
                 RUNNING = False
         elif event.type == QUIT:
             RUNNING = False
@@ -92,31 +92,21 @@ while RUNNING:
         margin_left = SCREEN_WIDTH - player_tiles_length / 2
         margin_top = SCREEN_HEIGHT - tile_height - 60
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            mouse = pygame.mouse.get_pos()
-            if event.button == 1:
-                pos = utils.tile_coordinates(mouse, screen)
-                discarded_tiles.append(players[0][pos])
-                utils.discard_graphics(screen, players[0][pos], discarded_tiles)
+        # if event.key == pygame.K_KP_ENTER:
+        #     discarded_tiles.append(players[0][pos])
+        #     print(players[0][pos].suit_type + players[0][pos].value)
 
+        # Was it the Escape key? If so, stop the loop.
 
-
-            # if event.key == pygame.K_KP_ENTER:
-            #     discarded_tiles.append(players[0][pos])
-            #     print(players[0][pos].suit_type + players[0][pos].value)
-
-            # Was it the Escape key? If so, stop the loop.
-
-            else:
-                if player == 0:
-                    players[player], all_tiles, discarded_tiles = utils.player_turn(
-                        players[player], all_tiles, discarded_tiles, screen
-                    )
-                else:
-                    players[player], all_tiles, discarded_tiles = utils.comp_turn(
-                        players[player], all_tiles, discarded_tiles, screen
-                    )
-                player = (player + 1) % 4
+        if player == 0:
+            players[player], all_tiles, discarded_tiles = utils.player_turn(
+                players[player], all_tiles, discarded_tiles, screen, event
+            )
+        else:
+            players[player], all_tiles, discarded_tiles = utils.comp_turn(
+                players[player], all_tiles, discarded_tiles, screen
+            )
+        player = (player + 1) % 4
         # Did the user click the window close button? If so, stop the loop.
 
 
