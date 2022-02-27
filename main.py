@@ -70,9 +70,7 @@ pos = 0
 
 utils.player_graphics(players, screen, 0)
 utils.comp_graphics(screen)
-for i in range(3):
-    utils.discard_graphics(screen, players[0][i], discarded_tiles)
-    discarded_tiles.append(players[0][i])
+
 # Main loop
 while RUNNING:
     # Tracking the mouse movements
@@ -132,10 +130,13 @@ while RUNNING:
         #     print(found)
         # superimposing the text onto our button
         # screen.blit('', (tile_width / 2 + 50, height / 2))
-        # if pygame.MOUSEBUTTONDOWN:
-        #     #     pos = utils.tile_coordinates(mouse, screen)
-        #     discarded_tiles.append(players[0][pos])
-        # # utils.print_tiles_as_str(discarded_tiles)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse = pygame.mouse.get_pos()
+            if event.button == 1:
+                pos = utils.tile_coordinates(mouse, screen)
+                discarded_tiles.append(players[0][pos])
+                utils.discard_graphics(screen, players[0][pos], discarded_tiles)
+        # utils.print_tiles_as_str(discarded_tiles)
         # for i in range(4):
         #     players[i].append
         # pos = pygame.mouse.get_pos()

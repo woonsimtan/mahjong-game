@@ -53,7 +53,6 @@ def create_screen():
     return screen, SCREEN_HEIGHT, SCREEN_WIDTH
 
 
-
 # Card class definition
 class Tile:
     def __init__(self, suit_type, value):
@@ -260,6 +259,7 @@ def check_for_jihu(player_tiles):
             return True
     return False
 
+
 def check_for_pair(tile1, tile2):
     return tile1 == tile2
 
@@ -450,13 +450,19 @@ def comp_graphics(screen):
     pygame.display.update()
 
 
-# def tile_coordinates(coord, screen):
-#     display_info = pygame.display.Info()
-#     SCREEN_HEIGHT = display_info.current_h
-#     SCREEN_WIDTH = display_info.current_w
-#     tile_width, tile_height = size_values(50.0, 80.0)
-
-#     margin = SCREEN_WIDTH / 2 - 6.5 * tile_width
-#     if coord[0] > margin and coord[0] < margin + tile_width * 13:
-#         print(int((coord[0] - margin) // tile_width) - 1)
-#         return int((coord[0] - margin) // tile_width) - 1
+def tile_coordinates(coord, screen):
+    display_info = pygame.display.Info()
+    SCREEN_HEIGHT = display_info.current_h
+    SCREEN_WIDTH = display_info.current_w
+    tile_width, tile_height = size_values(50.0, 80.0)
+    margin_left = SCREEN_WIDTH / 2 - 7 * tile_width
+    margin_top = SCREEN_HEIGHT - tile_height - 60
+    margin_right = margin_left + tile_width * 14
+    if (
+        coord[0] >= margin_left
+        and coord[0] < margin_right
+        and coord[1] >= margin_top
+        and coord[1] < margin_top + 60
+    ):
+        print(int((coord[0] - margin_left) // tile_width))
+        return int((coord[0] - margin_left) // tile_width)
