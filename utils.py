@@ -4,6 +4,7 @@ from string import hexdigits
 from turtle import width
 import pygame
 from pygame.locals import K_ESCAPE, KEYDOWN, QUIT
+from random import randint
 
 
 def create_screen():
@@ -50,7 +51,6 @@ def create_screen():
     chi_button_rect.center = (440, 400)
     hu_button_rect.center = (520, 400)
     return screen, SCREEN_HEIGHT, SCREEN_WIDTH
-
 
 
 # Card class definition
@@ -259,6 +259,7 @@ def check_for_jihu(player_tiles):
             return True
     return False
 
+
 def check_for_pair(tile1, tile2):
     return tile1 == tile2
 
@@ -457,3 +458,35 @@ def tile_coordinates(coord, screen):
     if coord[0] > margin and coord[0] < margin + tile_width * 13:
         print(int((coord[0] - margin) // tile_width) - 1)
         return int((coord[0] - margin) // tile_width) - 1
+
+
+def pick_up_tile(all_tiles):
+    new_tile = all_tiles[0]
+    all_tiles = all_tiles[1:]
+    return new_tile
+
+
+def comp_turn(player_tiles, all_tiles, discarded_tiles, screen):
+    player_tiles.append(pick_up_tile(all_tiles))
+    player_tiles = sort_tiles(player_tiles)
+    discard_tile = player_tiles[randint(0, 13)]
+    player_tiles.remove(discard_tile)
+    discarded_tiles.append(discard_tile)
+    discard_graphics(screen, discard_tile, discarded_tiles)
+    return player_tiles, all_tiles, discarded_tiles
+
+
+def player_turn(player_tiles, all_tiles, discarded_tiles, screen):
+    player_tiles.append(pick_up_tile(all_tiles))
+    player_tiles = sort_tiles(player_tiles)
+    player_graphics(player_tiles, screen, 0)
+    discard_tile = select_discard_tile()
+    player_tiles.remove(discard_tile)
+    discarded_tiles.append(discard_tile)
+    discard_graphics(screen, discard_tile, discarded_tiles)
+    return player_tiles, all_tiles, discarded_tiles
+
+
+def select_discard_tile():
+    # TODO: make use of mouse selection
+    return Tile("Bamboo", "1")
