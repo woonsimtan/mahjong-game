@@ -1,5 +1,6 @@
 import random
 from re import S, X
+
 from string import hexdigits
 from turtle import width
 import pygame
@@ -377,7 +378,7 @@ def player_graphics(players, screen, pos):
         screen.blit(
             players_tiles,
             (
-                SCREEN_WIDTH / 2 - tile_width * 6.5 + i * tile_width,
+                SCREEN_WIDTH / 2.0 - tile_width * 7 + i * tile_width,
                 SCREEN_HEIGHT - tile_height - 60,
             ),
         )
@@ -393,7 +394,7 @@ def discard_graphics(screen, tiles, discarded_tiles):
         "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
     )
     tile_width, tile_height = size_values(25.0, 45.0)
-    tile = pygame.transform.scale(tile_width, tile_height)
+    tile = pygame.transform.scale(tile, (tile_width, tile_height))
     # The row and column determined is from the fact that there are 148 Mahjong tiles
     # If there is a draw then there will be 96 tiles left
     total_row = 8
@@ -402,9 +403,11 @@ def discard_graphics(screen, tiles, discarded_tiles):
     tile_pos = len(discarded_tiles)
     tile_row = tile_pos // total_column
     tile_column = tile_pos % total_column
-    pos_width = SCREEN_WIDTH / 2 - total_row / 2 * tile_column
-    pos_height = SCREEN_HEIGHT / 2 - total_column / 2 * tile_row
-    screen.blit(tile, pos_width, pos_height)
+    margin_left = SCREEN_WIDTH / 2 - (total_column / 2) * tile_width
+    margin_top = SCREEN_HEIGHT / 2 - (total_row / 2) * tile_height
+    pos_width = margin_left + tile_width * tile_column
+    pos_height = margin_top + tile_height * tile_row
+    screen.blit(tile, (pos_width, pos_height))
 
     pygame.display.update()
 
@@ -453,11 +456,16 @@ def tile_coordinates(coord, screen):
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
     tile_width, tile_height = size_values(50.0, 80.0)
-
-    margin = SCREEN_WIDTH / 2 - 6.5 * tile_width
-    if coord[0] > margin and coord[0] < margin + tile_width * 13:
-        print(int((coord[0] - margin) // tile_width) - 1)
-        return int((coord[0] - margin) // tile_width) - 1
+    margin_left = SCREEN_WIDTH / 2 - 7 * tile_width
+    margin_top = SCREEN_HEIGHT - tile_height - 60
+    margin_right = margin_left + tile_width * 14
+    if (
+        coord[0] >= margin_left
+        and coord[0] < margin_right
+        and coord[1] >= margin_top
+        and coord[1] < margin_top + 60
+    ):
+        return int((coord[0] - margin_left) // tile_width)
 
 
 def pick_up_tile(all_tiles):
@@ -490,3 +498,4 @@ def player_turn(player_tiles, all_tiles, discarded_tiles, screen):
 def select_discard_tile():
     # TODO: make use of mouse selection
     return Tile("Bamboo", "1")
+

@@ -1,15 +1,16 @@
 # import libraries
+from pickle import FALSE, TRUE
 from traceback import print_list
 import pygame
 from pygame.locals import K_ESCAPE, KEYDOWN, QUIT
-
+import pygame.gfxdraw
 import utils
 from utils import Tile
 
 
 # initialise game
 pygame.init()
-screen, screen_height, screen_width = utils.create_screen()
+screen, SCREEN_HEIGHT, SCREEN_WIDTH = utils.create_screen()
 
 # images
 # Tiles
@@ -70,6 +71,7 @@ player = 0
 
 utils.player_graphics(players, screen, 0)
 utils.comp_graphics(screen)
+
 # Main loop
 while RUNNING:
     # Tracking the mouse movements
@@ -78,7 +80,38 @@ while RUNNING:
     # utils.player_graphics(players, screen,1)
     # Loop events occuring inside the game window
     for event in pygame.event.get():
+
         if event.type == KEYDOWN:
+        #     # if mouse is hovered on a button it
+        #     # highlights the tile
+        tile_width, tile_height = utils.size_values(50.0, 80.0)
+        player_tiles_length = 14 * tile_width
+        margin_left = SCREEN_WIDTH - player_tiles_length / 2
+        margin_top = SCREEN_HEIGHT - tile_height - 60
+        
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse = pygame.mouse.get_pos()
+            if event.button == 1:
+                pos = utils.tile_coordinates(mouse, screen)
+                discarded_tiles.append(players[0][pos])
+                utils.discard_graphics(screen, players[0][pos], discarded_tiles)
+        
+        if event.type == KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                utils.player_graphics(players, screen, pos)
+                pygame.gfxdraw.rectangle(
+                    screen,
+                    (margin_left, margin_top, tile_width, tile_height),
+                    (255, 255, 255, 230),
+                )
+                pos += 1
+            elif event.key == pygame.K_LEFT:
+                utils.player_graphics(players, screen, pos)
+                pos -= 1
+            elif event.key == pygame.K_KP_ENTER:
+                discarded_tiles.append(players[0][pos])
+                print(players[0][pos].suit_type + players[0][pos].value)
+
             # Was it the Escape key? If so, stop the loop.
             if event.key == K_ESCAPE:
                 RUNNING = False
