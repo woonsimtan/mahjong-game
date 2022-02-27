@@ -1,4 +1,6 @@
 import random
+from re import S, X
+from turtle import width
 import pygame
 from pygame.locals import K_ESCAPE, KEYDOWN, QUIT
 
@@ -19,6 +21,7 @@ def create_screen():
     pygame.display.set_caption("Mahjong Game")
 
     # Loading image for the icon
+
     icon = pygame.image.load("icon.jpg")
 
     # Setting the game icon
@@ -246,23 +249,106 @@ def print_wall(screen):
 
 # Player 1 tile display
 # not the best
-def player_graphics(players, screen):
+def player_graphics(players, screen, pos):
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
     tile_width, tile_height = size_values(50.0, 80.0)
     for i in range(len(players[0])):
+
         tiles = players[0][i]
         players_tiles = pygame.image.load(
             "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
         )
+        if i != pos:
+            players_tiles = pygame.transform.scale(
+                players_tiles, (tile_width, tile_height)
+            )
+            screen.blit(
+                players_tiles,
+                (
+                    SCREEN_WIDTH / 2 - tile_width * 6.5 + i * tile_width,
+                    SCREEN_HEIGHT - tile_height - 40,
+                ),
+            )
+        else:
+            players_tiles = pygame.transform.scale(
+                players_tiles, (tile_width, tile_height)
+            )
+            screen.blit(
+                players_tiles,
+                (
+                    SCREEN_WIDTH / 2 - tile_width * 6.5 + i * tile_width,
+                    SCREEN_HEIGHT - tile_height - 60,
+                ),
+            )
 
-        players_tiles = pygame.transform.scale(players_tiles, (tile_width, tile_height))
-        screen.blit(
-            players_tiles,
-            (
-                SCREEN_WIDTH / 2 - tile_width * 6.5 + i * tile_width,
-                SCREEN_HEIGHT - tile_height - 40,
-            ),
-        )
     pygame.display.update()
+
+
+def discard_graphics(screen, tiles, discarded_tiles):
+    display_info = pygame.display.Info()
+    SCREEN_HEIGHT = display_info.current_h
+    SCREEN_WIDTH = display_info.current_w
+    tile = pygame.image.load(
+        "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
+    )
+    tile_width, tile_height = size_values(15.0, 25.0)
+    tile = pygame.transform.scale(tile_width, tile_height)
+
+    screen.blit(
+        tile,
+    )
+
+    pygame.display.update()
+
+
+def comp_graphics(screen):
+    display_info = pygame.display.Info()
+    SCREEN_HEIGHT = display_info.current_h
+    SCREEN_WIDTH = display_info.current_w
+    tile_width, tile_height = size_values(25.0, 45.0)
+    tile_backing = pygame.image.load("./mahjong-tiles/back.jpg")
+    tile_backing = pygame.transform.scale(tile_backing, (tile_width, tile_height))
+    tile_backing_sides = pygame.transform.rotate(tile_backing, 90)
+    for i in range(3):
+        if i == 1:
+            for j in range(13):
+                screen.blit(
+                    tile_backing,
+                    (
+                        SCREEN_WIDTH / 2 - tile_width * 6.5 + j * tile_width,
+                        0,
+                    ),
+                )
+        else:
+            for j in range(13):
+                if i // 2 == 1:
+                    screen.blit(
+                        tile_backing_sides,
+                        (
+                            SCREEN_WIDTH - tile_height,
+                            SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width,
+                        ),
+                    )
+                else:
+                    screen.blit(
+                        tile_backing_sides,
+                        (
+                            0,
+                            SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width,
+                        ),
+                    )
+    pygame.display.update()
+
+
+def tile_coordinates(coord, screen):
+    display_info = pygame.display.Info()
+    SCREEN_HEIGHT = display_info.current_h
+    SCREEN_WIDTH = display_info.current_w
+    tile_width, tile_height = size_values(50.0, 80.0)
+
+    margin = SCREEN_WIDTH / 2 - 6.5 * tile_width
+    if coord[0] > margin and coord[0] < margin + tile_width * 13:
+        print(int((coord[0] - margin) // tile_width) - 1)
+        return int((coord[0] - margin) // tile_width) - 1
