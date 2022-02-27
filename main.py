@@ -66,7 +66,8 @@ players, all_tiles = utils.distribute_tiles(all_tiles)
 # # pygame.display.update()
 # # Variable to keep the main loop running
 RUNNING = True
-pos = 0
+player = 0
+# pos = 0
 
 utils.player_graphics(players, screen, 0)
 utils.comp_graphics(screen)
@@ -79,71 +80,22 @@ while RUNNING:
     # utils.player_graphics(players, screen,1)
     # Loop events occuring inside the game window
     for event in pygame.event.get():
-        # Resizable window
-        # if event.type == pygame.VIDEORESIZE:
-        #     # There's some code to add back window content here.
-        #     screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
 
-        #     utils.player_graphics(players, screen, 0)
-        #     utils.comp_graphics(screen)
-
-        # mouse = pygame.mouse.get_pos()
-        # pos = utils.tile_coordinates(mouse, screen)
-        # if pos is int:
-        #     utils.player_graphics(players, screen, pos)
-        # if event.type == pygame.MOUSEBUTTONDOWN:
-        #     mouse = pygame.mouse.get_pos()
-
+        if event.type == KEYDOWN:
         #     # if mouse is hovered on a button it
         #     # highlights the tile
         tile_width, tile_height = utils.size_values(50.0, 80.0)
         player_tiles_length = 14 * tile_width
         margin_left = SCREEN_WIDTH - player_tiles_length / 2
         margin_top = SCREEN_HEIGHT - tile_height - 60
-        #     found = FALSE
-        #     while (
-        #         not found
-        #         and mouse[0] >= margin_left
-        #         and mouse[0] < margin_left + player_tiles_length
-        #         and mouse[1] >= margin_top
-        #         and mouse[1] < margin_top + 60
-        #     ):
-        #         pygame.draw.rect(
-        #             screen,
-        #             (255, 255, 0),
-        #             (margin_left, margin_top, tile_width, tile_height),
-        #             3,
-        #         )
-        #         pygame.gfxdraw.rectangle(
-        #             screen,
-        #             (margin_left, margin_top, tile_width, tile_height),
-        #             (0, 0, 0, 230),
-        #         )
-        #         if (
-        #             mouse[0] >= margin_left
-        #             and mouse[0] < margin_left + player_tiles_length
-        #             and mouse[1] >= margin_top
-        #             and mouse[1] < margin_top + 60
-        #         ):
-        #             found = TRUE
-        #     pygame.display.update()
-        #     print(found)
-        # superimposing the text onto our button
-        # screen.blit('', (tile_width / 2 + 50, height / 2))
+        
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse = pygame.mouse.get_pos()
             if event.button == 1:
                 pos = utils.tile_coordinates(mouse, screen)
                 discarded_tiles.append(players[0][pos])
                 utils.discard_graphics(screen, players[0][pos], discarded_tiles)
-        # utils.print_tiles_as_str(discarded_tiles)
-        # for i in range(4):
-        #     players[i].append
-        # pos = pygame.mouse.get_pos()
-        # if event.type == pygame.VIDEORESIZE:
-        #     width, height = event.dict["size"]
-        #     # recreate screen object required for pygame version 1
-        #     screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+        
         if event.type == KEYDOWN:
             if event.key == pygame.K_RIGHT:
                 utils.player_graphics(players, screen, pos)
@@ -163,8 +115,41 @@ while RUNNING:
             # Was it the Escape key? If so, stop the loop.
             if event.key == K_ESCAPE:
                 RUNNING = False
+            else:
+                if player == 0:
+                    players[player], all_tiles, discarded_tiles = utils.player_turn(
+                        players[player], all_tiles, discarded_tiles, screen
+                    )
+                else:
+                    players[player], all_tiles, discarded_tiles = utils.comp_turn(
+                        players[player], all_tiles, discarded_tiles, screen
+                    )
+                player = (player + 1) % 4
         # Did the user click the window close button? If so, stop the loop.
         elif event.type == QUIT:
             RUNNING = False
 
-    # Did the user hit a key?
+# Resizable window
+# if event.type == pygame.VIDEORESIZE:
+#     # There's some code to add back window content here.
+#     screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+
+#     utils.player_graphics(players, screen, 0)
+#     utils.comp_graphics(screen)
+
+# mouse = pygame.mouse.get_pos()
+# pos = utils.tile_coordinates(mouse, screen)
+# if pos is int:
+#     utils.player_graphics(players, screen, pos)
+
+# if pygame.MOUSEBUTTONDOWN:
+#     #     pos = utils.tile_coordinates(mouse, screen)
+#     discarded_tiles.append(players[0][pos])
+# # utils.print_tiles_as_str(discarded_tiles)
+# for i in range(4):
+#     players[i].append
+# pos = pygame.mouse.get_pos()
+# if event.type == pygame.VIDEORESIZE:
+#     width, height = event.dict["size"]
+#     # recreate screen object required for pygame version 1
+#     screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
