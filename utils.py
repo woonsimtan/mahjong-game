@@ -1,5 +1,6 @@
 import random
 from re import S, X
+from string import hexdigits
 from turtle import width
 import pygame
 from pygame.locals import K_ESCAPE, KEYDOWN, QUIT
@@ -9,6 +10,7 @@ def create_screen():
     # Create the screen object
     # The size is determined by the constant screen_width and screen_height
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    pygame.display.toggle_fullscreen()
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
@@ -293,12 +295,19 @@ def discard_graphics(screen, tiles, discarded_tiles):
     tile = pygame.image.load(
         "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
     )
-    tile_width, tile_height = size_values(15.0, 25.0)
+    tile_width, tile_height = size_values(25.0, 45.0)
     tile = pygame.transform.scale(tile_width, tile_height)
+    # The row and column determined is from the fact that there are 148 Mahjong tiles
+    # If there is a draw then there will be 96 tiles left
+    total_row = 8
+    total_column = 12
 
-    screen.blit(
-        tile,
-    )
+    tile_pos = len(discarded_tiles)
+    tile_row = tile_pos // total_column
+    tile_column = tile_pos % total_column
+    pos_width = SCREEN_WIDTH / 2 - total_row / 2 * tile_column
+    pos_height = SCREEN_HEIGHT / 2 - total_column / 2 * tile_row
+    screen.blit(tile, pos_width, pos_height)
 
     pygame.display.update()
 
@@ -307,7 +316,7 @@ def comp_graphics(screen):
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
-    tile_width, tile_height = size_values(25.0, 45.0)
+    tile_width, tile_height = size_values(30.0, 50.0)
     tile_backing = pygame.image.load("./mahjong-tiles/back.jpg")
     tile_backing = pygame.transform.scale(tile_backing, (tile_width, tile_height))
     tile_backing_sides = pygame.transform.rotate(tile_backing, 90)
