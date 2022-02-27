@@ -6,7 +6,6 @@ from pygame.locals import K_ESCAPE, KEYDOWN, QUIT
 import utils
 from utils import Tile
 
-FPS = 60
 
 # initialise game
 pygame.init()
@@ -78,6 +77,14 @@ while RUNNING:
     # utils.player_graphics(players, screen,1)
     # Loop events occuring inside the game window
     for event in pygame.event.get():
+        # Resizable window
+        # if event.type == pygame.VIDEORESIZE:
+        #     # There's some code to add back window content here.
+        #     screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+
+        #     utils.player_graphics(players, screen, 0)
+        #     utils.comp_graphics(screen)
+
         # mouse = pygame.mouse.get_pos()
         # pos = utils.tile_coordinates(mouse, screen)
         # if pos is int:
@@ -90,7 +97,10 @@ while RUNNING:
         # for i in range(4):
         #     players[i].append
         # pos = pygame.mouse.get_pos()
-
+        # if event.type == pygame.VIDEORESIZE:
+        #     width, height = event.dict["size"]
+        #     # recreate screen object required for pygame version 1
+        #     screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
         if event.type == KEYDOWN:
             # if event.key == pygame.K_RIGHT:
             #     utils.player_graphics(players, screen, pos=pos + 1)
