@@ -475,28 +475,6 @@ def pick_up_tile(all_tiles):
     return new_tile
 
 
-def comp_turn(player_tiles, all_tiles, discarded_tiles, screen):
-    player_tiles.append(pick_up_tile(all_tiles))
-    player_tiles = sort_tiles(player_tiles)
-    discard_tile = player_tiles[randint(0, 13)]
-    player_tiles.remove(discard_tile)
-    discarded_tiles.append(discard_tile)
-    discard_graphics(screen, discard_tile, discarded_tiles)
-    return player_tiles, all_tiles, discarded_tiles
-
-
-def player_turn(player_tiles, all_tiles, discarded_tiles, screen, event):
-    player_tiles.append(pick_up_tile(all_tiles))
-    player_tiles = sort_tiles(player_tiles)
-    player_graphics(player_tiles, screen)
-    discarded_tiles = select_discard_tile(player_tiles, discarded_tiles, screen, event)
-    print(discarded_tiles)
-    discard_tile = discarded_tiles[-1]
-    player_tiles.remove(discard_tile)
-    discard_graphics(screen, discard_tile, discarded_tiles)
-    return player_tiles, all_tiles, discarded_tiles
-
-
 def select_discard_tile(player_tiles, discarded_tiles, screen, event):
 
     print_tiles_as_str(player_tiles)

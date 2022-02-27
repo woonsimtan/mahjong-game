@@ -77,10 +77,9 @@ utils.comp_graphics(screen)
 new = True
 # Main loop
 while RUNNING and len(all_tiles > 0):
-    # Tracking the mouse movements
-    # clock.tick(FPS)
-    # utils.print_wall(screen)
-    # utils.player_graphics(players, screen,1)
+
+    # TODO: utils.print_wall(screen)
+
     # Loop events occuring inside the game window
 
     if player == 0:
@@ -129,22 +128,6 @@ while RUNNING and len(all_tiles > 0):
             utils.discard_graphics(screen, discard_tile, discarded_tiles)
             player = (player + 1) % 4
             new = True
-
-        # if event.key == pygame.K_KP_ENTER:
-        #     discarded_tiles.append(players[0][pos])
-        #     print(players[0][pos].suit_type + players[0][pos].value)
-
-        # Was it the Escape key? If so, stop the loop.
-
-        # if player == 0:
-        #     players[player], all_tiles, discarded_tiles = utils.player_turn(
-        #         players[player], all_tiles, discarded_tiles, screen, event
-        #     )
-        # else:
-        #     players[player], all_tiles, discarded_tiles = utils.comp_turn(
-        #         players[player], all_tiles, discarded_tiles, screen
-        #     )
-        # Did the user click the window close button? If so, stop the loop.
 
 
 # Resizable window
