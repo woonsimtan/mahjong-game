@@ -24,7 +24,6 @@ def create_screen():
     pygame.display.set_caption("Mahjong Game")
 
     # Loading image for the icon
-
     icon = pygame.image.load("icon.jpg")
 
     # Setting the game icon
@@ -52,6 +51,7 @@ def create_screen():
     chi_button_rect.center = (440, 400)
     hu_button_rect.center = (520, 400)
     return screen, SCREEN_HEIGHT, SCREEN_WIDTH
+
 
 
 # Card class definition
@@ -118,7 +118,7 @@ def check_for_chi(player_tiles, discarded_tile):
         wanted_tiles.append(
             Tile(discarded_tile.suit_type, str(int(discarded_tile.value) - 2 + i))
         )
-    new_tile_set = player_tiles
+    new_tile_set = player_tiles.copy()
     new_tile_set.append(discarded_tile)
     for i in range(3):
         if (
@@ -155,16 +155,110 @@ def check_for_gong(player_tiles, discarded_tile):
 def check_for_win(player_tiles):
     ping_hu = check_for_pinghu(player_tiles)
     peng_peng_hu = check_for_pengpenghu(player_tiles)
-    ji_hu = False
-    ban_se = False
-    qing_yi_se = False
+    ji_hu = check_for_jihu(player_tiles)
     shisan_yao = False
     # flower_hu = False
-    win = (
-        ping_hu or peng_peng_hu or ji_hu or ban_se or qing_yi_se or shisan_yao
-    )  # or flower_hu
+    win = ping_hu or peng_peng_hu or ji_hu or shisan_yao  # or flower_hu
     return win
 
+
+def check_for_seqence(tile_list):
+    # if sequence exists remove it
+    for tile1 in tile_list:
+        if tile_list.count(tile1) == 1:
+            tile2 = Tile(tile1.suit_type, str(int(tile1.value) + 1))
+            tile3 = Tile(tile1.suit_type, str(int(tile1.value) + 2))
+        if tile1 in tile_list and tile2 in tile_list and tile3 in tile_list:
+            tile_list.remove(tile1)
+            tile_list.remove(tile2)
+            tile_list.remove(tile3)
+    for tile1 in reversed(tile_list):
+        if tile_list.count(tile1) == 1:
+            tile2 = Tile(tile1.suit_type, str(int(tile1.value) - 1))
+            tile3 = Tile(tile1.suit_type, str(int(tile1.value) - 2))
+        if tile1 in tile_list and tile2 in tile_list and tile3 in tile_list:
+            tile_list.remove(tile1)
+            tile_list.remove(tile2)
+            tile_list.remove(tile3)
+    return True
+
+
+def check_for_jihu(player_tiles):
+    # TODO: Fix this
+    tiles_to_check = player_tiles.copy()
+    tiles_set = []
+    occurances = []
+    for tile in tiles_to_check:
+        if tile not in tiles_set:
+            tiles_set.append(tile)
+            occurances.append(1)
+        else:
+            occurances[tiles_set.index(tile)] += 1
+    for i in range(len(occurances)):
+        if (
+            occurances[i] == 4
+            or (tiles_set[i].suit_type == "Dragon" and occurances[i] == 3)
+            or (tiles_set[i].suit_type == "Wind" and occurances[i] == 3)
+        ):
+            for i in range(3):
+                tiles_to_check.remove(tiles_set[i])
+    triples = sum(1 for v in occurances if v == 0)
+    if triples == 0:
+        # check for all seq
+        if check_for_pinghu(tiles_to_check):
+            return True
+    if triples == 1:
+        # remove peng and check that remaining sequences
+        tile = tiles_set[occurances.index(3)]
+        for i in range(3):
+            tiles_to_check.remove(tile)
+        if check_for_pinghu(tiles_to_check):
+            return True
+    if triples == 2:
+        #
+        if len(tiles_to_check) == 8:
+            # find sequence
+            for tile in tiles_set:
+                wanted_tiles = []
+                for i in range(5):
+                    wanted_tiles.append(
+                        Tile(tile.suit_type, str(int(tile.value) - 2 + i))
+                    )
+                for i in range(3):
+                    if (
+                        (wanted_tiles[i] in tiles_to_check)
+                        and (wanted_tiles[i + 1] in tiles_to_check)
+                        and (wanted_tiles[i + 2] in tiles_to_check)
+                    ):
+                        tiles_to_check.remove(wanted_tiles[i])
+                        tiles_to_check.remove(wanted_tiles[i + 1])
+                        tiles_to_check.remove(wanted_tiles[i + 2])
+            # check remaining all triples
+            if check_for_pengpenghu(tiles_to_check):
+                return True
+        # elif len(tiles_to_check) == 11:
+
+        # elif len(tiles_to_check) == 14:
+
+    if triples == 3:
+        # find sequence
+        for tile in tiles_set:
+            wanted_tiles = []
+            for i in range(5):
+                wanted_tiles.append(Tile(tile.suit_type, str(int(tile.value) - 2 + i)))
+            for i in range(3):
+                if (
+                    (wanted_tiles[i] in tiles_to_check)
+                    and (wanted_tiles[i + 1] in tiles_to_check)
+                    and (wanted_tiles[i + 2] in tiles_to_check)
+                ):
+                    tiles_to_check.remove(wanted_tiles[i])
+                    tiles_to_check.remove(wanted_tiles[i + 1])
+                    tiles_to_check.remove(wanted_tiles[i + 2])
+        # check remaining all triples
+        if check_for_pengpenghu(tiles_to_check):
+            return True
+    return False
 
 def check_for_pair(tile1, tile2):
     return tile1 == tile2
