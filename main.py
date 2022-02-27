@@ -5,7 +5,8 @@ import pygame
 from pygame.locals import K_ESCAPE, KEYDOWN, QUIT
 import pygame.gfxdraw
 import utils
-from utils import Tile
+from utils import Tile, print_tiles_as_str
+from random import randint
 
 
 # initialise game
@@ -39,8 +40,10 @@ suit_values = {
 
 # The mahjong tiles - List of Objects
 all_tiles, discarded_tiles = utils.create_tiles(suit_values)
+print(len(all_tiles))
 # set up players
 players, all_tiles = utils.distribute_tiles(all_tiles)
+print(len(all_tiles))
 
 
 # # check statements
@@ -66,19 +69,31 @@ players, all_tiles = utils.distribute_tiles(all_tiles)
 # # pygame.display.update()
 # # Variable to keep the main loop running
 RUNNING = True
-player = 0
+player = 1
 # pos = 0
 
 utils.player_graphics(players[0], screen)
 utils.comp_graphics(screen)
-
+new = True
 # Main loop
-while RUNNING:
+while RUNNING and len(all_tiles > 0):
     # Tracking the mouse movements
     # clock.tick(FPS)
     # utils.print_wall(screen)
     # utils.player_graphics(players, screen,1)
     # Loop events occuring inside the game window
+
+    if player == 0:
+        utils.player_graphics(players[player], screen)
+        if new:
+            print(len(all_tiles))
+            new_tile = utils.pick_up_tile(all_tiles)
+            players[player].append(new_tile)
+            all_tiles.remove(new_tile)
+            print(len(all_tiles))
+            players[player] = utils.sort_tiles(players[player])
+            new = False
+
     for event in pygame.event.get():
         if event.type == KEYDOWN:
             if event.key == pygame.K_ESCAPE:
@@ -87,10 +102,33 @@ while RUNNING:
             RUNNING = False
         #     # if mouse is hovered on a button it
         #     # highlights the tile
-        tile_width, tile_height = utils.size_values(50.0, 80.0)
-        player_tiles_length = 14 * tile_width
-        margin_left = SCREEN_WIDTH - player_tiles_length / 2
-        margin_top = SCREEN_HEIGHT - tile_height - 60
+        if player == 0:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse = pygame.mouse.get_pos()
+                if event.button == 1:
+                    pos = utils.tile_coordinates(mouse, screen)
+                    if isinstance(pos, int):
+                        utils.print_tiles_as_str(players[0])
+                        print(pos)
+                        utils.print_tiles_as_str([players[0][pos]])
+                        discarded_tiles.append(players[0][pos])
+
+                        utils.discard_graphics(screen, players[0][pos], discarded_tiles)
+
+                        players[0].remove(players[0][pos])
+                        utils.player_graphics(players[0], screen)
+                        player = (player + 1) % 4
+                        new = True
+        else:
+            new_tile = utils.pick_up_tile(all_tiles)
+            players[player].append(new_tile)
+            all_tiles.remove(new_tile)
+            discard_tile = players[player][randint(0, 13)]
+            players[player].remove(discard_tile)
+            discarded_tiles.append(discard_tile)
+            utils.discard_graphics(screen, discard_tile, discarded_tiles)
+            player = (player + 1) % 4
+            new = True
 
         # if event.key == pygame.K_KP_ENTER:
         #     discarded_tiles.append(players[0][pos])
@@ -98,15 +136,14 @@ while RUNNING:
 
         # Was it the Escape key? If so, stop the loop.
 
-        if player == 0:
-            players[player], all_tiles, discarded_tiles = utils.player_turn(
-                players[player], all_tiles, discarded_tiles, screen, event
-            )
-        else:
-            players[player], all_tiles, discarded_tiles = utils.comp_turn(
-                players[player], all_tiles, discarded_tiles, screen
-            )
-        player = (player + 1) % 4
+        # if player == 0:
+        #     players[player], all_tiles, discarded_tiles = utils.player_turn(
+        #         players[player], all_tiles, discarded_tiles, screen, event
+        #     )
+        # else:
+        #     players[player], all_tiles, discarded_tiles = utils.comp_turn(
+        #         players[player], all_tiles, discarded_tiles, screen
+        #     )
         # Did the user click the window close button? If so, stop the loop.
 
 

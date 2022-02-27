@@ -7,6 +7,7 @@ import pygame
 from pygame.locals import K_ESCAPE, KEYDOWN, QUIT
 from random import randint
 import time
+import math
 
 
 def create_screen():
@@ -401,7 +402,7 @@ def discard_graphics(screen, tiles, discarded_tiles):
     total_row = 8
     total_column = 12
 
-    tile_pos = len(discarded_tiles)
+    tile_pos = len(discarded_tiles) - 1
     tile_row = tile_pos // total_column
     tile_column = tile_pos % total_column
     margin_left = SCREEN_WIDTH / 2 - (total_column / 2) * tile_width
@@ -464,14 +465,13 @@ def tile_coordinates(coord, screen):
         coord[0] >= margin_left
         and coord[0] < margin_right
         and coord[1] >= margin_top
-        and coord[1] < margin_top + 60
+        and coord[1] < margin_top + tile_height
     ):
-        return int((coord[0] - margin_left) // tile_width)
+        return int(math.floor((coord[0] - margin_left) // tile_width))
 
 
 def pick_up_tile(all_tiles):
     new_tile = all_tiles[0]
-    all_tiles = all_tiles[1:]
     return new_tile
 
 
@@ -510,4 +510,5 @@ def select_discard_tile(player_tiles, discarded_tiles, screen, event):
             discarded_tiles.append(player_tiles[pos])
             discard_graphics(screen, player_tiles[pos], discarded_tiles)
             return discarded_tiles
-    return discarded_tiles.append(player_tiles[0])
+    discarded_tiles.append(player_tiles[0])
+    return discarded_tiles
