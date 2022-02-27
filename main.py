@@ -76,7 +76,7 @@ utils.player_graphics(players[0], screen)
 utils.comp_graphics(screen)
 new = True
 # Main loop
-while RUNNING and len(all_tiles > 0):
+while RUNNING and len(all_tiles) > 0:
 
     # TODO: utils.print_wall(screen)
 
