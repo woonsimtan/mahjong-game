@@ -100,7 +100,7 @@ while RUNNING and len(all_tiles) > 0:
         elif event.type == QUIT:
             RUNNING = False
         # TODO: if mouse is hovered on a tile highlight the tile
-
+        # TODO: check for pong/kong/chi
         if player == 0:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse = pygame.mouse.get_pos()
