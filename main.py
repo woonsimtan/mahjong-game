@@ -69,7 +69,7 @@ print(len(all_tiles))
 # # pygame.display.update()
 # # Variable to keep the main loop running
 RUNNING = True
-player = 1
+player = 2
 # pos = 0
 
 utils.player_graphics(players[0], screen)
@@ -99,13 +99,13 @@ while RUNNING and len(all_tiles) > 0:
                 RUNNING = False
         elif event.type == QUIT:
             RUNNING = False
-        #     # if mouse is hovered on a button it
-        #     # highlights the tile
+        # TODO: if mouse is hovered on a tile highlight the tile
+
         if player == 0:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse = pygame.mouse.get_pos()
                 if event.button == 1:
-                    pos = utils.tile_coordinates(mouse, screen)
+                    pos = utils.tile_coordinates(mouse)
                     if isinstance(pos, int):
                         utils.print_tiles_as_str(players[0])
                         print(pos)
@@ -115,6 +115,7 @@ while RUNNING and len(all_tiles) > 0:
                         utils.discard_graphics(screen, players[0][pos], discarded_tiles)
 
                         players[0].remove(players[0][pos])
+                        utils.clear_screen(screen, discarded_tiles)
                         utils.player_graphics(players[0], screen)
                         player = (player + 1) % 4
                         new = True

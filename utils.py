@@ -453,7 +453,7 @@ def comp_graphics(screen):
     pygame.display.update()
 
 
-def tile_coordinates(coord, screen):
+def tile_coordinates(coord):
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
@@ -490,3 +490,15 @@ def select_discard_tile(player_tiles, discarded_tiles, screen, event):
             return discarded_tiles
     discarded_tiles.append(player_tiles[0])
     return discarded_tiles
+
+
+def clear_screen(screen, discarded_tiles):
+    GREEN = (0, 105, 53)
+    display_info = pygame.display.Info()
+    tile_width, tile_height = size_values(50.0, 80.0)
+    margin_top = display_info.current_h - tile_height - 60
+    margin_right = display_info.current_w / 2 - 7 * tile_width + tile_width * 13
+    screen.fill(GREEN, (margin_right, margin_top, tile_width, tile_height))
+    comp_graphics(screen)
+    discard_graphics(screen, discarded_tiles[-1], discarded_tiles)
+    return screen
