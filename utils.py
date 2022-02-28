@@ -1,3 +1,4 @@
+from dis import dis
 import random
 from re import S, X
 
@@ -502,3 +503,19 @@ def clear_screen(screen, discarded_tiles):
     comp_graphics(screen)
     discard_graphics(screen, discarded_tiles[-1], discarded_tiles)
     return screen
+
+
+def check_discard(discarded_tile, player_tiles, player):
+
+    if player != 3:
+        gong = check_for_gong(player_tiles, discarded_tile)
+        peng = check_for_peng(player_tiles, discarded_tile)
+    else:
+        gong = check_for_gong(player_tiles, discarded_tile)
+        peng = check_for_peng(player_tiles, discarded_tile)
+        chi = check_for_chi(player_tiles, discarded_tile)
+    genereate_buttons(peng, gong, chi)
+
+
+def genereate_buttons(peng, gong, chi):
+    return False
