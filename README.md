@@ -6,8 +6,8 @@ Follows rules according to: http://www.singaporemahjong.com/rules/ \
 The game is built using pygame and is semi functional\
 - we can pick up tiles and discard tiles\
 \
-WIP:\
+WIP:
 - adding peng/chi/gong functionality\
 \
-TODO:\
+TODO:
 - add hu functionality
