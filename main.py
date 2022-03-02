@@ -41,10 +41,9 @@ suit_values = {
 
 # The mahjong tiles - List of Objects
 all_tiles, discarded_tiles = utils.create_tiles(suit_values)
-print(len(all_tiles))
+
 # set up players
 players, all_tiles = utils.distribute_tiles(all_tiles)
-print(len(all_tiles))
 
 
 # # check statements
