@@ -9,7 +9,6 @@ from utils import Tile, print_tiles_as_str
 from random import randint
 import time
 
-
 # initialise game
 pygame.init()
 screen, SCREEN_HEIGHT, SCREEN_WIDTH = utils.create_screen()
@@ -21,8 +20,7 @@ screen, SCREEN_HEIGHT, SCREEN_WIDTH = utils.create_screen()
 """ For the winds and dragons the image is saved a singular letter """
 # aspect ratio that was ideal was 600 to 45 and 800 to 35
 
-
-# The type of card
+# The suits and their possible values
 # TODO: add flowers
 suit_values = {
     "Numbers": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
@@ -32,7 +30,8 @@ suit_values = {
     "Dragon": ["B", "Z", "F"],
     # "Flower": [["1", "2", "3", "4", "5", "6", "7", "8"]
 }
-# The card value - for counting points
+
+# The tile values - for counting points
 # tile_values = {
 #     "1": 1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9,
 #     "E":10, "S": 11, "W":12, "N":13,
@@ -45,7 +44,6 @@ exposed_tiles = []
 
 # set up players
 players, all_tiles = utils.distribute_tiles(all_tiles)
-
 
 # # check statements
 # hu_tiles = []
@@ -71,11 +69,11 @@ players, all_tiles = utils.distribute_tiles(all_tiles)
 # # Variable to keep the main loop running
 RUNNING = True
 player = 2
-# pos = 0
+new = True
 
 utils.player_graphics(players[0], screen)
 utils.comp_graphics(screen)
-new = True
+
 # Main loop
 while RUNNING and len(all_tiles) > 0:
 
@@ -86,11 +84,9 @@ while RUNNING and len(all_tiles) > 0:
     if player == 0:
         utils.player_graphics(players[player], screen)
         if new:
-            # print(len(all_tiles))
             new_tile = utils.pick_up_tile(all_tiles)
             players[player].append(new_tile)
             all_tiles.remove(new_tile)
-            # print(len(all_tiles))
             players[player] = utils.sort_tiles(players[player])
             new = False
     else:
