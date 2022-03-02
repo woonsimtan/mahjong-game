@@ -7,6 +7,7 @@ import pygame.gfxdraw
 import utils
 from utils import Tile, print_tiles_as_str
 from random import randint
+import time
 
 
 # initialise game
@@ -85,13 +86,24 @@ while RUNNING and len(all_tiles) > 0:
     if player == 0:
         utils.player_graphics(players[player], screen)
         if new:
-            print(len(all_tiles))
+            # print(len(all_tiles))
             new_tile = utils.pick_up_tile(all_tiles)
             players[player].append(new_tile)
             all_tiles.remove(new_tile)
-            print(len(all_tiles))
+            # print(len(all_tiles))
             players[player] = utils.sort_tiles(players[player])
             new = False
+    else:
+        time.sleep(1)
+        new_tile = utils.pick_up_tile(all_tiles)
+        players[player].append(new_tile)
+        all_tiles.remove(new_tile)
+        discard_tile = players[player][randint(0, 13)]
+        players[player].remove(discard_tile)
+        discarded_tiles.append(discard_tile)
+        utils.discard_graphics(screen, discard_tile, discarded_tiles)
+        player = (player + 1) % 4
+        new = True
 
     for event in pygame.event.get():
         if event.type == KEYDOWN:
@@ -107,9 +119,8 @@ while RUNNING and len(all_tiles) > 0:
                 if event.button == 1:
                     pos = utils.tile_coordinates(mouse, screen)
                     if isinstance(pos, int):
-                        utils.print_tiles_as_str(players[0])
-                        print(pos)
-                        utils.print_tiles_as_str([players[0][pos]])
+                        # utils.print_tiles_as_str(players[0])
+                        # utils.print_tiles_as_str([players[0][pos]])
                         discarded_tiles.append(players[0][pos])
 
                         utils.discard_graphics(screen, players[0][pos], discarded_tiles)
@@ -118,16 +129,6 @@ while RUNNING and len(all_tiles) > 0:
                         utils.player_graphics(players[0], screen)
                         player = (player + 1) % 4
                         new = True
-        else:
-            new_tile = utils.pick_up_tile(all_tiles)
-            players[player].append(new_tile)
-            all_tiles.remove(new_tile)
-            discard_tile = players[player][randint(0, 13)]
-            players[player].remove(discard_tile)
-            discarded_tiles.append(discard_tile)
-            utils.discard_graphics(screen, discard_tile, discarded_tiles)
-            player = (player + 1) % 4
-            new = True
 
 
 # Resizable window
