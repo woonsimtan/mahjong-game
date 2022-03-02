@@ -505,7 +505,7 @@ def clear_screen(screen, discarded_tiles):
     return screen
 
 
-def check_discard(discarded_tile, player_tiles, player):
+def check_discard(discarded_tile, player_tiles, player, screen):
 
     if player != 3:
         gong = check_for_gong(player_tiles, discarded_tile)
@@ -514,8 +514,51 @@ def check_discard(discarded_tile, player_tiles, player):
         gong = check_for_gong(player_tiles, discarded_tile)
         peng = check_for_peng(player_tiles, discarded_tile)
         chi = check_for_chi(player_tiles, discarded_tile)
-    genereate_buttons(peng, gong, chi)
+    genereate_buttons(screen, peng, gong, chi)
 
 
-def genereate_buttons(peng, gong, chi):
-    return False
+def genereate_buttons(screen, peng, gong, chi):
+    display_info = pygame.display.Info()
+    SCREEN_HEIGHT = display_info.current_h
+    SCREEN_WIDTH = display_info.current_w
+
+    # Types of fonts to be used
+    large_font = pygame.font.SysFont("arial", 50)
+    WHITE = (255, 255, 255)
+    RED = (255, 0, 0)
+
+    # Game Buttons
+    peng_button = large_font.render("Peng", True, WHITE)
+    gong_button = large_font.render("Gong", True, WHITE)
+    chi_button = large_font.render("Chi", True, WHITE)
+    # hu_button = large_font.render("Hu", True, WHITE)
+
+    # Gets_rectangular covering of text
+    peng_button_rect = peng_button.get_rect()
+    gong_button_rect = gong_button.get_rect()
+    chi_button_rect = chi_button.get_rect()
+    # hu_button_rect = hu_button.get_rect()
+
+    tile_height = 80  # edit this!
+    # Places the text
+    peng_button_rect.center = (
+        SCREEN_WIDTH - 2 * tile_height,
+        SCREEN_HEIGHT - 2 * tile_height,
+    )
+    gong_button_rect.center = (
+        SCREEN_WIDTH - 3 * tile_height,
+        SCREEN_HEIGHT - 2 * tile_height,
+    )
+    chi_button_rect.center = (
+        SCREEN_WIDTH - 4 * tile_height,
+        SCREEN_HEIGHT - 2 * tile_height,
+    )
+    # hu_button_rect.center = (SCREEN_WIDTH - 5 *tile_height, SCREEN_HEIGHT - 2*tile_height)
+    if peng:
+        screen.blit(peng_button, peng_button_rect)
+    if gong:
+        screen.blit(gong_button, gong_button_rect)
+    if chi:
+        screen.blit(chi_button, chi_button_rect)
+    # screen.blit(hu_button, hu_button_rect)
+    pygame.display.update()
