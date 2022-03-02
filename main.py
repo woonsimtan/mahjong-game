@@ -9,7 +9,6 @@ from utils import Tile, print_tiles_as_str
 from random import randint
 import time
 
-
 # initialise game
 pygame.init()
 screen, SCREEN_HEIGHT, SCREEN_WIDTH = utils.create_screen()
@@ -21,8 +20,7 @@ screen, SCREEN_HEIGHT, SCREEN_WIDTH = utils.create_screen()
 """ For the winds and dragons the image is saved a singular letter """
 # aspect ratio that was ideal was 600 to 45 and 800 to 35
 
-
-# The type of card
+# The suits and their possible values
 # TODO: add flowers
 suit_values = {
     "Numbers": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
@@ -32,7 +30,8 @@ suit_values = {
     "Dragon": ["B", "Z", "F"],
     # "Flower": [["1", "2", "3", "4", "5", "6", "7", "8"]
 }
-# The card value - for counting points
+
+# The tile values - for counting points
 # tile_values = {
 #     "1": 1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9,
 #     "E":10, "S": 11, "W":12, "N":13,
@@ -41,10 +40,10 @@ suit_values = {
 
 # The mahjong tiles - List of Objects
 all_tiles, discarded_tiles = utils.create_tiles(suit_values)
+exposed_tiles = []
 
 # set up players
 players, all_tiles = utils.distribute_tiles(all_tiles)
-
 
 # # check statements
 # hu_tiles = []
@@ -70,11 +69,11 @@ players, all_tiles = utils.distribute_tiles(all_tiles)
 # # Variable to keep the main loop running
 RUNNING = True
 player = 2
-# pos = 0
+new = True
 
 utils.player_graphics(players[0], screen)
 utils.comp_graphics(screen)
-new = True
+
 # Main loop
 while RUNNING and len(all_tiles) > 0:
 
@@ -85,11 +84,9 @@ while RUNNING and len(all_tiles) > 0:
     if player == 0:
         utils.player_graphics(players[player], screen)
         if new:
-            # print(len(all_tiles))
             new_tile = utils.pick_up_tile(all_tiles)
             players[player].append(new_tile)
             all_tiles.remove(new_tile)
-            # print(len(all_tiles))
             players[player] = utils.sort_tiles(players[player])
             new = False
     else:
@@ -101,8 +98,14 @@ while RUNNING and len(all_tiles) > 0:
         players[player].remove(discard_tile)
         discarded_tiles.append(discard_tile)
         utils.discard_graphics(screen, discard_tile, discarded_tiles)
+        # TODO: check for pong/kong/chi
+        # if no_intercept:
         player = (player + 1) % 4
         new = True
+        # else
+        # player = 0
+        # players[0].append(discard_tile)
+        # new = False
 
     for event in pygame.event.get():
         if event.type == KEYDOWN:
@@ -111,19 +114,15 @@ while RUNNING and len(all_tiles) > 0:
         elif event.type == QUIT:
             RUNNING = False
         # TODO: if mouse is hovered on a tile highlight the tile
-        # TODO: check for pong/kong/chi
+
         if player == 0:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse = pygame.mouse.get_pos()
                 if event.button == 1:
                     pos = utils.tile_coordinates(mouse)
                     if isinstance(pos, int):
-                        # utils.print_tiles_as_str(players[0])
-                        # utils.print_tiles_as_str([players[0][pos]])
                         discarded_tiles.append(players[0][pos])
-
                         utils.discard_graphics(screen, players[0][pos], discarded_tiles)
-
                         players[0].remove(players[0][pos])
                         utils.clear_screen(screen, discarded_tiles)
                         utils.player_graphics(players[0], screen)
