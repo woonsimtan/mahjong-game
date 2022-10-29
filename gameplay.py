@@ -112,6 +112,7 @@ class Player:
                 done = True
             else:
                 print("Invalid chi")
+        self.print_player_tiles()
 
     def peng(self, tile):
         for i in range(2):
@@ -212,6 +213,7 @@ def check_for_chi(player_tiles, discarded_tile):
             wanted_tiles.append(
                 Tile(discarded_tile.suit_type, str(int(discarded_tile.value) - 2 + i))
             )
+        wanted_tiles = sort_tile_list(wanted_tiles)
         new_tile_set = player_tiles.copy()
         new_tile_set.append(discarded_tile)
         for i in range(3):
@@ -252,7 +254,7 @@ last_discarded = float("NaN")
 
 # gameplay for single round
 try:
-    while not check_for_win(last_discarded):
+    while not check_for_win(last_discarded) and len(all_tiles) > 0:
 
         peng, new_player_number = check_for_peng(last_discarded)
         if peng:
@@ -262,6 +264,7 @@ try:
 
         chi = check_for_chi(players[player_number].hidden_tiles, last_discarded)
         if chi:
+            players[player_number].print_player_tiles()
             print("You can chi. Would you like to chi? (Enter 1 if yes, 0 if no): ")
             yes = int(input())
             chi = chi and yes
@@ -291,6 +294,9 @@ try:
         print("These are all the previously discarded tiles:")
         print_tiles(discarded_tiles)
         print("--------")
+
+    if len(all_tiles) == 0:
+        print("Nobody won")
 
 except Exception as e:
     print(e)
