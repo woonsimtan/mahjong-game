@@ -1,6 +1,5 @@
 # imports
 import random
-from collections import Counter
 
 # fixed values
 suit_values = {
@@ -77,23 +76,27 @@ class Player:
         # self.ignored_tiles = ignored_tiles
 
     def print_player_tiles(self):
-        tiles = self.hidden_tiles + self.displayed_tiles
-        print_tiles(tiles)
+        print("These are your hidden tiles:")
+        print_tiles(self.hidden_tiles)
+        print("These are your displayed tiles:")
+        print_tiles(self.displayed_tiles)
 
     def discard(self):
         print("Please select tile to discard:")
-        tile_to_discard = float("NaN")
-        while tile_to_discard not in self.hidden_tiles:
+        done = False
+        while not done:
             suit = input("Enter suit (Bamboo, Circles, Numbers, Dragon or Wind):")
             value = input("Enter value:")
             tile_to_discard = Tile(suit, value)
-        self.hidden_tiles.remove_tile(tile_to_discard)
+            if tile_to_discard in self.hidden_tiles:
+                self.hidden_tiles.remove(tile_to_discard)
+                done = True
         return tile_to_discard
 
     def chi(self, tile):
         done = False
         while not done:
-            suit = tile.suit
+            suit = tile.suit_type
             tile1_value = input("enter tile 1 value: ")
             tile2_value = input("enter tile 2 value: ")
             if (
@@ -103,30 +106,64 @@ class Player:
                 # TODO: insert check that is a valid sequence
                 self.hidden_tiles.remove(Tile(suit, tile1_value))
                 self.hidden_tiles.remove(Tile(suit, tile2_value))
-                self.displayed_tiles.append(
-                    sort_tile_list(
-                        [tile, Tile(suit, tile1_value), Tile(suit, tile2_value)]
-                    )
+                self.displayed_tiles += sort_tile_list(
+                    [tile, Tile(suit, tile1_value), Tile(suit, tile2_value)]
                 )
                 done = True
             else:
                 print("Invalid chi")
 
     def peng(self, tile):
-        # TODO: insert check that tile appears at least twice in hidden tiles
         for i in range(2):
             self.hidden_tiles.remove(tile)
-        self.displayed_tiles.append([tile, tile, tile])
+        self.displayed_tiles += [tile, tile, tile]
+        self.print_player_tiles()
 
     # ignore gong for now
-    def gong(self, tile):
-        # TODO: insert check that tile appears thrice in hidden tiles
-        for i in range(3):
-            self.hidden_tiles.remove(tile)
-        self.displayed_tiles.append([tile, tile, tile, tile])
+    # # def gong(self, tile):
+    # #     for i in range(3):
+    # #         self.hidden_tiles.remove(tile)
+    # #     self.displayed_tiles.append([tile, tile, tile, tile])
 
-    def win(self, tile):
-        # TODO
+    def win(self, new_tile):
+        # TODO: test this!
+        # win by any 4 sets of 3 and a pair
+        # know displayed tiles are already sets of 3
+        # so only need to check hidden tiles
+
+        tile_list = sort_tile_list(self.hidden_tiles.copy() + [new_tile])
+        tile_set = []
+        for tile in tile_list:
+            if tile not in tile_set:
+                tile_set.append(tile)
+
+        possible_pairs = []
+        for tile in tile_set:
+            if tile_list.count(tile) >= 2:
+                possible_pairs.append(tile)
+
+        for pair in possible_pairs:
+            test_list = tile_list.copy()
+            test_list.remove(pair)
+            test_list.remove(pair)
+            # remaining is either part of sequence or part of triplet
+            while len(test_list) > 0:
+                tile = test_list[0]
+                if test_list.count(tile) < 3:
+                    tile2 = Tile(tile.suit_type, str(int(tile.value) + 1))
+                    tile3 = Tile(tile.suit_type, str(int(tile.value) + 2))
+                    if tile2 in test_list and tile3 in test_list:
+                        test_list.remove(tile)
+                        test_list.remove(tile2)
+                        test_list.remove(tile3)
+                    else:
+                        return False
+                else:  # because sorted so if appears more than twice has to be part of triplet?
+                    test_list.remove(tile)
+                    test_list.remove(tile)
+                    test_list.remove(tile)
+            return True
+
         return False
 
 
@@ -158,12 +195,12 @@ def check_for_win(discarded_tile):
     if discarded_tile != discarded_tile:
         return False
     for player in players:
-        print("--------- Player " + str(players.index(player)) + " ---------")
         if player.win(discarded_tile):
             print("Player " + str(players.index(player)) + " has won!")
             return True
         else:
-            print("Not won yet")
+            pass
+    return False
 
 
 def check_for_chi(player_tiles, discarded_tile):
@@ -184,7 +221,6 @@ def check_for_chi(player_tiles, discarded_tile):
                 and (wanted_tiles[i + 2] in new_tile_set)
             ):
                 return True
-        # return False
     return False
 
 
@@ -199,9 +235,8 @@ def check_for_peng(discarded_tile):
 
 
 # have ignored gong to begin with
-def check_for_gong(discarded_tile):
-    # TODO
-    return False
+# # def check_for_gong(discarded_tile):
+# #     return False
 
 
 # set initial values
@@ -216,29 +251,46 @@ last_discarded = float("NaN")
 
 
 # gameplay for single round
+try:
+    while not check_for_win(last_discarded):
 
-while not check_for_win(last_discarded) and round < 1:
-    # only for checking stuff
-    round = 1
+        peng, new_player_number = check_for_peng(last_discarded)
+        if peng:
+            player_number = new_player_number
+            players[player_number].peng(last_discarded)
+            last_discarded = players[player_number].discard()
 
-    print(players)
-    for player in players:
-        print(player.position)
-        player.print_player_tiles()
+        chi = check_for_chi(players[player_number].hidden_tiles, last_discarded)
+        if chi:
+            print("You can chi. Would you like to chi? (Enter 1 if yes, 0 if no): ")
+            yes = int(input())
+            chi = chi and yes
 
-    peng, new_player_number = check_for_peng(last_discarded)
-    if peng:
-        player_number = new_player_number
-        players[player_number].peng(last_discarded)
-        last_discarded = players[player_number].discard()
+        if not peng and chi:
+            players[player_number].chi(last_discarded)
+            last_discarded = players[player_number].discard()
 
-    chi = check_for_chi(players[player_number], last_discarded)
-    if not peng and chi:
-        players[player_number].chi(last_discarded)
-        last_discarded = players[player_number].discard()
+        if not peng and not chi:
+            if last_discarded == last_discarded:
+                discarded_tiles.append(last_discarded)
+            print("Player" + str(player_number))
+            new_tile = pickup_tile(all_tiles)
+            print("You picked up:")
+            print_tiles([new_tile])
+            if players[player_number].win(new_tile):
+                break
 
-    if not peng and not chi and last_discarded != float("NaN"):
-        discarded_tiles.append(last_discarded)
-        print("Player" + str(player_number))
-        players[player_number].hidden_tiles.append(pickup_tile(all_tiles))
-        players[player_number].print_player_tiles()
+            players[player_number].hidden_tiles.append(new_tile)
+            players[player_number].print_player_tiles()
+            last_discarded = players[player_number].discard()
+        player_number = (player_number + 1) % 4
+
+        print("--------")
+        print("This tile has been discarded:")
+        print_tiles([last_discarded])
+        print("These are all the previously discarded tiles:")
+        print_tiles(discarded_tiles)
+        print("--------")
+
+except Exception as e:
+    print(e)
