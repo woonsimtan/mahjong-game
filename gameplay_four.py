@@ -198,6 +198,8 @@ def check_for_win(discarded_tile):
     for player in players:
         if player.win(discarded_tile):
             print("Player " + str(players.index(player)) + " has won!")
+            player.hidden_tiles.append(discarded_tile)
+            player.print_player_tiles()
             return True
         else:
             pass
@@ -257,7 +259,7 @@ try:
     while not check_for_win(last_discarded) and len(all_tiles) > 0:
 
         peng, new_player_number = check_for_peng(last_discarded)
-        if peng:
+        if peng:  # assume if can peng always peng
             player_number = new_player_number
             players[player_number].peng(last_discarded)
             last_discarded = players[player_number].discard()
@@ -267,7 +269,7 @@ try:
             players[player_number].print_player_tiles()
             print("You can chi. Would you like to chi? (Enter 1 if yes, 0 if no): ")
             yes = int(input())
-            chi = chi and yes
+            chi = chi and (yes == 1)
 
         if not peng and chi:
             players[player_number].chi(last_discarded)
