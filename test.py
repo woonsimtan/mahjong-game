@@ -119,17 +119,24 @@ def check_for_win_edited(tile_list):
         if check_for_sets_of_three(test_list):
             return True
     return False
+
 # and isinstance(tile.value, int)
+# special_case = [Tile("Circles", 1),Tile("Circles", 1),Tile("Circles", 1),\
+#             Tile("Circles", 2),Tile("Circles", 3),Tile("Circles", 4),\
+#                 Tile("Circles", 6),Tile("Circles", 7),Tile("Circles", 8),\
+#                     Tile("Dragon", "Z"),Tile("Dragon", "Z"),\
+#                         Tile("Wind", "N"),Tile("Wind", "N"),Tile("Wind", "N")]
+special_case = [Tile("Bamboo", 1),Tile("Bamboo", 2),Tile("Bamboo", 3),\
+            Tile("Bamboo", 1),Tile("Bamboo", 2),Tile("Bamboo", 3),\
+                Tile("Circles", 6),Tile("Circles", 7),Tile("Circles", 8),\
+                    Tile("Dragon", "Z"),Tile("Dragon", "Z"),\
+                        Tile("Bamboo", 3),Tile("Bamboo", 4),Tile("Bamboo", 5)]
+print_tiles(special_case)
+print(check_for_win_edited(special_case))
 try:
     check = False
     while check == False:
-        # special_case = [Tile("Circles", 1),Tile("Circles", 1),Tile("Circles", 1),\
-        #     Tile("Circles", 2),Tile("Circles", 3),Tile("Circles", 4),\
-        #         Tile("Circles", 6),Tile("Circles", 7),Tile("Circles", 8),\
-        #             Tile("Dragon", "Z"),Tile("Dragon", "Z"),\
-        #                 Tile("Wind", "N"),Tile("Wind", "N"),Tile("Wind", "N")]
-        # print_tiles(special_case)
-        # print(check_for_win_edited(special_case))
+        
         all_tiles = create_tiles()
         test_case = []
         # for i in range(15):
