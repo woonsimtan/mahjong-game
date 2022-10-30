@@ -233,7 +233,7 @@ def check_for_peng(discarded_tile):
         return False, float("NaN")
     for player in players:
         if player.hidden_tiles.count(discarded_tile) >= 2:
-            print("Player " + str(players.index(player)) + " PENG")
+            # print("Player " + str(players.index(player)) + " PENG")
             return True, players.index(player)
     return False, float("NaN")
 
@@ -259,17 +259,39 @@ try:
     while not check_for_win(last_discarded) and len(all_tiles) > 0:
 
         peng, new_player_number = check_for_peng(last_discarded)
-        if peng:  # assume if can peng always peng
-            player_number = new_player_number
-            players[player_number].peng(last_discarded)
-            last_discarded = players[player_number].discard()
+        if peng:  #changed to allow for pen
+            print("Player" + str(new_player_number))
+            players[new_player_number].print_player_tiles()
+            print("You can peng. Would you like to peng? (Enter 1 if yes, 0 if no): ")
+            yes = int(input())
+            peng = peng and (yes == 1)
+            if peng:
+                player_number = new_player_number
+            # player_number = new_player_number
+            # players[player_number].peng(last_discarded)
+            # last_discarded = players[player_number].discard()
 
         chi = check_for_chi(players[player_number].hidden_tiles, last_discarded)
         if chi:
+            print("Player" + str(player_number))
             players[player_number].print_player_tiles()
             print("You can chi. Would you like to chi? (Enter 1 if yes, 0 if no): ")
             yes = int(input())
             chi = chi and (yes == 1)
+        #TODO implement incase both is possible this can be similar to selection of which chi
+        # if peng and chi:
+            # print("You can peng or chi. Which would you like to do?(peng or chi)")
+            # response = input()
+            # if response == 'peng':
+            #     peng = True
+            #     chi = False
+            # else:
+            #     chi = True
+            #     peng = False
+
+        if peng and not chi:
+            players[player_number].peng(last_discarded)
+            last_discarded = players[player_number].discard()
 
         if not peng and chi:
             players[player_number].chi(last_discarded)
