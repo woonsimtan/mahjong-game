@@ -1,3 +1,4 @@
+
 import random
 
 class Tile:
@@ -15,7 +16,6 @@ suit_values = {
     "Wind": ["E", "S", "W", "N"],
     "Dragon": ["B", "Z", "F"],
 }
-
 
 def sort_tile_list(tile_list):
     return sorted(tile_list, key=lambda x: (x.suit_type, x.value), reverse=False)
@@ -84,6 +84,42 @@ def check_for_win(tile_list):
 
     return False
 
+
+def check_for_win_old(tile_list):
+    tile_set = []
+    for tile in tile_list:
+        if tile not in tile_set:
+            tile_set.append(tile)
+
+    possible_pairs = []
+    for tile in tile_set:
+        if tile_list.count(tile) >= 2:
+            possible_pairs.append(tile)
+
+    for pair in possible_pairs:
+        test_list = tile_list.copy()
+        test_list.remove(pair)
+        test_list.remove(pair)
+        # remaining is either part of sequence or part of triplet
+        while len(test_list) > 0:
+            tile = test_list[0]
+            if test_list.count(tile) < 3:
+                tile2 = Tile(tile.suit_type, str(int(tile.value) + 1))
+                tile3 = Tile(tile.suit_type, str(int(tile.value) + 2))
+                if tile2 in test_list and tile3 in test_list:
+                    test_list.remove(tile)
+                    test_list.remove(tile2)
+                    test_list.remove(tile3)
+                else:
+                    return False
+            else:  # because sorted so if appears more than twice has to be part of triplet?
+                test_list.remove(tile)
+                test_list.remove(tile)
+                test_list.remove(tile)
+        return True
+
+    return False
+
 def check_for_sets_of_three(test_list):
 
     while len(test_list) > 0:
@@ -103,10 +139,11 @@ def check_for_sets_of_three(test_list):
                 test_list.remove(tile)
                 test_list.remove(tile)
                 test_list.remove(tile)
-                    
             except:
                 return False
     return True
+
+
 
 def check_for_win_edited(tile_list):
 
@@ -124,16 +161,16 @@ def check_for_win_edited(tile_list):
     return False
 
 # and isinstance(tile.value, int)
-special_case = [Tile("Circles", 1),Tile("Circles", 1),Tile("Circles", 1),\
-            Tile("Circles", 2),Tile("Circles", 3),Tile("Circles", 4),\
-                Tile("Circles", 6),Tile("Circles", 7),Tile("Circles", 8),\
-                    Tile("Dragon", "Z"),Tile("Dragon", "Z"),\
-                        Tile("Wind", "N"),Tile("Wind", "N"),Tile("Wind", "N")]
-# special_case = [Tile("Bamboo", 1),Tile("Bamboo", 2),Tile("Bamboo", 3),\
-#             Tile("Bamboo", 1),Tile("Bamboo", 2),Tile("Bamboo", 3),\
-#                 Tile("Circles", 6),Tile("Circles", 7),Tile("Circles", 8),\
+# special_case = [Tile("Circles", "1"),Tile("Circles", "1"),Tile("Circles", "1"),\
+#             Tile("Circles", "2"),Tile("Circles", "3"),Tile("Circles", "4"),\
+#                 Tile("Circles", "6"),Tile("Circles", "7"),Tile("Circles", "8"),\
 #                     Tile("Dragon", "Z"),Tile("Dragon", "Z"),\
-#                         Tile("Bamboo", 3),Tile("Bamboo", 4),Tile("Bamboo", 5)]
+#                         Tile("Wind", "N"),Tile("Wind", "N"),Tile("Wind", "N")]
+special_case = [Tile("Bamboo", "1"),Tile("Bamboo", "2"),Tile("Bamboo", "3"),\
+            Tile("Bamboo", "1"),Tile("Bamboo", "2"),Tile("Bamboo", "3"),\
+                Tile("Circles", "6"),Tile("Circles", "7"),Tile("Circles", "8"),\
+                    Tile("Dragon", "Z"),Tile("Dragon", "Z"),\
+                        Tile("Bamboo", "3"),Tile("Bamboo", "4"),Tile("Bamboo", "5")]
 print_tiles(special_case)
 print(check_for_win(special_case))
 try:
