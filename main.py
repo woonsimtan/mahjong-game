@@ -51,6 +51,7 @@ while not gameplay.check_for_win(last_discarded) and len(all_tiles) > 0 and runn
         new_tile = gameplay.pickup_tile(all_tiles)
         players[player_number].hidden_tiles.append(new_tile)
         last_discarded = players[player_number].discard()
+        discarded_tiles.append(last_discarded)
         graphics.discard_graphics(screen, last_discarded, discarded_tiles)
         player_number = (player_number + 1) % 4
         new = True
