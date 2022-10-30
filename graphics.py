@@ -1,6 +1,5 @@
 import pygame
 import math
-import time
 
 
 def create_screen():
@@ -25,27 +24,6 @@ def create_screen():
     # Setting the game icon
     pygame.display.set_icon(icon)
 
-    # Types of fonts to be used
-    small_font = pygame.font.Font(None, 32)
-    large_font = pygame.font.Font(None, 50)
-
-    # Game Buttons
-    peng_button = large_font.render("碰", True, WHITE)
-    gong_button = large_font.render("杠", True, WHITE)
-    chi_button = large_font.render("吃", True, WHITE)
-    hu_button = large_font.render("胡", True, WHITE)
-
-    # Gets_rectangular covering of text
-    peng_button_rect = peng_button.get_rect()
-    gong_button_rect = gong_button.get_rect()
-    chi_button_rect = chi_button.get_rect()
-    hu_button_rect = hu_button.get_rect()
-
-    # Places the text
-    peng_button_rect.center = (280, 400)
-    gong_button_rect.center = (360, 400)
-    chi_button_rect.center = (440, 400)
-    hu_button_rect.center = (520, 400)
     return screen, SCREEN_HEIGHT, SCREEN_WIDTH
 
 
@@ -61,31 +39,19 @@ def size_values(width, height):
 
 
 # Player 1 tile display
-def player_one_graphics(player_one, screen):
+def player_one_graphics(hidden, displayed, screen):
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
     tile_width, tile_height = size_values(50.0, 80.0)
-    for i in range(len(player_one)):
-
-        tiles = player_one[i]
+    for i in range(len(hidden + displayed)):
+        if i < len(hidden):
+            tiles = hidden[i]
+        else:
+            tiles = displayed[i - len(hidden)]
         players_tiles = pygame.image.load(
             "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
         )
-        #TODO animate the selection for chi and discard
-        # Attempt at making the selected tile shift up
-        # if i != pos:
-        #     players_tiles = pygame.transform.scale(
-        #         players_tiles, (tile_width, tile_height)
-        #     )
-        #     screen.blit(
-        #         players_tiles,
-        #         (
-        #             SCREEN_WIDTH / 2 - tile_width * 6.5 + i * tile_width,
-        #             SCREEN_HEIGHT - tile_height - 40,
-        #         ),
-        #     )
-        # else:
         players_tiles = pygame.transform.scale(players_tiles, (tile_width, tile_height))
         screen.blit(
             players_tiles,
@@ -94,7 +60,6 @@ def player_one_graphics(player_one, screen):
                 SCREEN_HEIGHT - tile_height - 60,
             ),
         )
-
     pygame.display.update()
 
 
@@ -124,7 +89,7 @@ def discard_graphics(screen, tiles, discarded_tiles):
     pygame.display.update()
 
 
-def comp_graphics(screen):
+def comp_graphics(players, screen):
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
@@ -132,34 +97,90 @@ def comp_graphics(screen):
     tile_backing = pygame.image.load("./mahjong-tiles/back.jpg")
     tile_backing = pygame.transform.scale(tile_backing, (tile_width, tile_height))
     tile_backing_sides = pygame.transform.rotate(tile_backing, 90)
-    for i in range(3):
-        if i == 1:
-            for j in range(13):
-                screen.blit(
-                    tile_backing,
-                    (
-                        SCREEN_WIDTH / 2 - tile_width * 6.5 + j * tile_width,
-                        0,
-                    ),
-                )
+
+    # for i in range(1, 4):
+    #     if i == 2:
+    #         x = SCREEN_WIDTH / 2 - tile_width * 6.5 + j * tile_width
+    #         y = 0
+    #     elif i == 3:
+    #         x = SCREEN_WIDTH - tile_height
+    #         y = SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width
+    #     elif i == 1:
+    #         x = 0
+    #         y = SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width
+
+    #     for hidden in players[i].hidden_tiles:
+    #         if i % 2 == 1:
+    #             screen.blit(tile_backing_sides, (x, y))
+    #         else:
+    #             screen.blit(tile_backing, (x, y))
+
+    #     for displayed in players[i].displayed_tiles:
+    #         tile = pygame.image.load(
+    #             "./mahjong-tiles/" + displayed.suit_type + displayed.value + ".jpg"
+    #         )
+    #         tile = pygame.transform.scale(tile, (tile_width, tile_height))
+    #         if i % 2 == 1:
+    #             tile = pygame.transform.rotate(tile, 90)
+    #         screen.blit(tile, (x, y))
+
+    for j in range(13):
+        # top row - player 2
+        if j < len(players[2].hidden_tiles):
+            screen.blit(
+                tile_backing,
+                (SCREEN_WIDTH / 2 - tile_width * 6.5 + j * tile_width, 0),
+            )
         else:
-            for j in range(13):
-                if i // 2 == 1:
-                    screen.blit(
-                        tile_backing_sides,
-                        (
-                            SCREEN_WIDTH - tile_height,
-                            SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width,
-                        ),
-                    )
-                else:
-                    screen.blit(
-                        tile_backing_sides,
-                        (
-                            0,
-                            SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width,
-                        ),
-                    )
+            displayed = players[2].displayed_tiles[j - len(players[2].hidden_tiles)]
+            tile = pygame.image.load(
+                "./mahjong-tiles/" + displayed.suit_type + displayed.value + ".jpg"
+            )
+            tile = pygame.transform.scale(tile, (tile_width, tile_height))
+            screen.blit(
+                tile,
+                (SCREEN_WIDTH / 2 - tile_width * 6.5 + j * tile_width, 0),
+            )
+        # right side - player 3
+        if j < len(players[3].hidden_tiles):
+            screen.blit(
+                tile_backing_sides,
+                (
+                    SCREEN_WIDTH - tile_height,
+                    SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width,
+                ),
+            )
+        else:
+            displayed = players[3].displayed_tiles[j - len(players[3].hidden_tiles)]
+            tile = pygame.image.load(
+                "./mahjong-tiles/" + displayed.suit_type + displayed.value + ".jpg"
+            )
+            tile = pygame.transform.scale(tile, (tile_width, tile_height))
+            tile = pygame.transform.rotate(tile, 90)
+            screen.blit(
+                tile,
+                (
+                    SCREEN_WIDTH - tile_height,
+                    SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width,
+                ),
+            )
+        # left side - player 1
+        if j < len(players[1].hidden_tiles):
+            screen.blit(
+                tile_backing_sides,
+                (0, SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width),
+            )
+        else:
+            displayed = players[1].displayed_tiles[j - len(players[1].hidden_tiles)]
+            tile = pygame.image.load(
+                "./mahjong-tiles/" + displayed.suit_type + displayed.value + ".jpg"
+            )
+            tile = pygame.transform.scale(tile, (tile_width, tile_height))
+            tile = pygame.transform.rotate(tile, 270)
+            screen.blit(
+                tile,
+                (0, SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width),
+            )
     pygame.display.update()
 
 
@@ -180,19 +201,19 @@ def tile_coordinates(coord):
         return int(math.floor((coord[0] - margin_left) // tile_width))
 
 
-def clear_screen(screen, discarded_tiles):
+def clear_screen(screen):
+
     GREEN = (0, 105, 53)
     display_info = pygame.display.Info()
     tile_width, tile_height = size_values(50.0, 80.0)
     margin_top = display_info.current_h - tile_height - 60
     margin_right = display_info.current_w / 2 - 7 * tile_width + tile_width * 13
     screen.fill(GREEN, (margin_right, margin_top, tile_width, tile_height))
-    comp_graphics(screen)
-    discard_graphics(screen, discarded_tiles[-1], discarded_tiles)
+    # comp_graphics(screen)
     return screen
 
 
-def genereate_buttons(screen, peng, gong, chi):
+def generate_buttons(screen, peng, gong, chi):
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
