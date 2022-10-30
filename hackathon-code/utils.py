@@ -28,7 +28,7 @@ def create_screen():
     pygame.display.set_caption("Mahjong Game")
 
     # Loading image for the icon
-    icon = pygame.image.load("icon.jpg")
+    icon = pygame.image.load("../icon.jpg")
 
     # Setting the game icon
     pygame.display.set_icon(icon)
@@ -362,7 +362,7 @@ def player_graphics(players, screen):
 
         tiles = players[i]
         players_tiles = pygame.image.load(
-            "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
+            "../mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
         )
         # Attempt at making the selected tile shift up
         # if i != pos:
@@ -394,7 +394,7 @@ def discard_graphics(screen, tiles, discarded_tiles):
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
     tile = pygame.image.load(
-        "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
+        "../mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
     )
     tile_width, tile_height = size_values(25.0, 45.0)
     tile = pygame.transform.scale(tile, (tile_width, tile_height))
@@ -420,7 +420,7 @@ def comp_graphics(screen):
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
     tile_width, tile_height = size_values(30.0, 50.0)
-    tile_backing = pygame.image.load("./mahjong-tiles/back.jpg")
+    tile_backing = pygame.image.load("../mahjong-tiles/back.jpg")
     tile_backing = pygame.transform.scale(tile_backing, (tile_width, tile_height))
     tile_backing_sides = pygame.transform.rotate(tile_backing, 90)
     for i in range(3):
