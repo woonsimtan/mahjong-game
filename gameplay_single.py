@@ -241,7 +241,7 @@ def check_for_chi(player_tiles, discarded_tile):
     return False
 
 
-def check_for_peng(discarded_tile):
+def check_for_peng(players, discarded_tile):
     if discarded_tile != discarded_tile:
         return False, float("NaN")
     for player in players:
@@ -271,7 +271,7 @@ if __name__ == "__main__":
     try:
         while not check_for_win(last_discarded) and len(all_tiles) > 0:
 
-            peng, new_player_number = check_for_peng(last_discarded)
+            peng, new_player_number = check_for_peng(players, last_discarded)
             if peng:
                 if new_player_number == 0:
                     players[new_player_number].print_player_tiles()
