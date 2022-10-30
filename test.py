@@ -1,4 +1,3 @@
-
 import random
 
 class Tile:
@@ -10,12 +9,13 @@ class Tile:
         return (self.suit_type == other.suit_type) and (self.value == other.value)
 
 suit_values = {
-    "Numbers": [1,2,3,4,5,6,7,8,9],
-    "Circles": [1,2,3,4,5,6,7,8,9],
-    "Bamboo": [1,2,3,4,5,6,7,8,9],
+    "Numbers": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    "Circles": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    "Bamboo": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
     "Wind": ["E", "S", "W", "N"],
     "Dragon": ["B", "Z", "F"],
 }
+
 
 def sort_tile_list(tile_list):
     return sorted(tile_list, key=lambda x: (x.suit_type, x.value), reverse=False)
@@ -62,7 +62,9 @@ def check_for_win(tile_list):
         # remaining is either part of sequence or part of triplet
         while len(test_list) > 0:
             tile = test_list[0]
-            if test_list.count(tile) < 3:
+            if test_list.count(tile) < 3 and (
+                tile.suit_type in ["Numbers", "Bamboo", "Circles"]
+            ):
                 tile2 = Tile(tile.suit_type, str(int(tile.value) + 1))
                 tile3 = Tile(tile.suit_type, str(int(tile.value) + 2))
                 if tile2 in test_list and tile3 in test_list:
@@ -70,12 +72,15 @@ def check_for_win(tile_list):
                     test_list.remove(tile2)
                     test_list.remove(tile3)
                 else:
-                    return False
+                    break
+            elif test_list.count(tile) < 3:
+                break
             else:  # because sorted so if appears more than twice has to be part of triplet?
                 test_list.remove(tile)
                 test_list.remove(tile)
                 test_list.remove(tile)
-        return True
+        if len(test_list) == 0:  # if while loop terminated naturally then valid win
+            return True
 
     return False
 
@@ -99,11 +104,9 @@ def check_for_sets_of_three(test_list):
                 test_list.remove(tile)
                 test_list.remove(tile)
                     
-            except Exception as e:
+            except:
                 return False
     return True
-
-
 
 def check_for_win_edited(tile_list):
 
@@ -121,18 +124,18 @@ def check_for_win_edited(tile_list):
     return False
 
 # and isinstance(tile.value, int)
-# special_case = [Tile("Circles", 1),Tile("Circles", 1),Tile("Circles", 1),\
-#             Tile("Circles", 2),Tile("Circles", 3),Tile("Circles", 4),\
-#                 Tile("Circles", 6),Tile("Circles", 7),Tile("Circles", 8),\
-#                     Tile("Dragon", "Z"),Tile("Dragon", "Z"),\
-#                         Tile("Wind", "N"),Tile("Wind", "N"),Tile("Wind", "N")]
-special_case = [Tile("Bamboo", 1),Tile("Bamboo", 2),Tile("Bamboo", 3),\
-            Tile("Bamboo", 1),Tile("Bamboo", 2),Tile("Bamboo", 3),\
+special_case = [Tile("Circles", 1),Tile("Circles", 1),Tile("Circles", 1),\
+            Tile("Circles", 2),Tile("Circles", 3),Tile("Circles", 4),\
                 Tile("Circles", 6),Tile("Circles", 7),Tile("Circles", 8),\
                     Tile("Dragon", "Z"),Tile("Dragon", "Z"),\
-                        Tile("Bamboo", 3),Tile("Bamboo", 4),Tile("Bamboo", 5)]
+                        Tile("Wind", "N"),Tile("Wind", "N"),Tile("Wind", "N")]
+# special_case = [Tile("Bamboo", 1),Tile("Bamboo", 2),Tile("Bamboo", 3),\
+#             Tile("Bamboo", 1),Tile("Bamboo", 2),Tile("Bamboo", 3),\
+#                 Tile("Circles", 6),Tile("Circles", 7),Tile("Circles", 8),\
+#                     Tile("Dragon", "Z"),Tile("Dragon", "Z"),\
+#                         Tile("Bamboo", 3),Tile("Bamboo", 4),Tile("Bamboo", 5)]
 print_tiles(special_case)
-print(check_for_win_edited(special_case))
+print(check_for_win(special_case))
 try:
     check = False
     while check == False:
@@ -147,9 +150,9 @@ try:
         test_case = sort_tile_list(test_case)
             # test_case.append([])
         # del test_case[-1]
-        if check_for_win_edited(test_case):
+        if check_for_win(test_case):
             print_tiles(test_case)
-            print(check_for_win_edited(test_case))
+            print(check_for_win(test_case))
         
 except Exception as e:
     print(e)
