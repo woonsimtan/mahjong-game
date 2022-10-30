@@ -35,35 +35,33 @@ new = True
 
 if __name__ == "__main__":
 
+    # initial display
     graphics.player_one_graphics(
         players[0].hidden_tiles, players[0].displayed_tiles, screen
     )
-    graphics.comp_graphics(screen)
+    graphics.comp_graphics(players, screen)
 
     # try:
     while not gameplay.check_for_win(last_discarded) and len(all_tiles) > 0 and running:
-        # BUG: not terminating on win
+        # BUG: not terminating on winning hand
+
+        # check for peng
         peng, new_player_number = gameplay.check_for_peng(players, last_discarded)
         # always assume peng if possible
         if peng:
             player_number = new_player_number
             players[player_number].peng(last_discarded)
             discarded_tiles.remove(last_discarded)
-            if player_number == 0:
-                graphics.clear_screen(screen)
-                tiles = gameplay.sort_tile_list(players[player_number].hidden_tiles)
-                graphics.player_one_graphics(tiles, players[0].displayed_tiles, screen)
-                new = False
-            else:
-                new = True
 
         if player_number == 0:  # if user
             # display user tiles
             tiles = gameplay.sort_tile_list(players[player_number].hidden_tiles)
             graphics.player_one_graphics(tiles, players[0].displayed_tiles, screen)
-            # if user's turn
-            if new:
-                # pick up a new tile
+            if peng:
+                # don't need to pick up new tile
+                new = False
+
+            if new:  # if need to pick up a new tile
                 new_tile = gameplay.pickup_tile(all_tiles)
                 players[player_number].hidden_tiles.append(new_tile)
                 new = False
@@ -78,6 +76,7 @@ if __name__ == "__main__":
             last_discarded = players[player_number].discard()
             discarded_tiles.append(last_discarded)
             graphics.discard_graphics(screen, last_discarded, discarded_tiles)
+            graphics.comp_graphics(players, screen)
             # next player
             player_number = (player_number + 1) % 4
             new = True
@@ -116,6 +115,7 @@ if __name__ == "__main__":
                                 )
 
                                 graphics.clear_screen(screen)
+                                graphics.comp_graphics(players, screen)
                                 graphics.discard_graphics(
                                     screen, discarded_tiles[-1], discarded_tiles
                                 )
