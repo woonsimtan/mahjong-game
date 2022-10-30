@@ -150,7 +150,9 @@ class Player:
             # remaining is either part of sequence or part of triplet
             while len(test_list) > 0:
                 tile = test_list[0]
-                if test_list.count(tile) < 3:
+                if test_list.count(tile) < 3 and (
+                    tile.suit_type in ["Numbers", "Bamboo", "Circles"]
+                ):
                     tile2 = Tile(tile.suit_type, str(int(tile.value) + 1))
                     tile3 = Tile(tile.suit_type, str(int(tile.value) + 2))
                     if tile2 in test_list and tile3 in test_list:
@@ -158,12 +160,15 @@ class Player:
                         test_list.remove(tile2)
                         test_list.remove(tile3)
                     else:
-                        return False
+                        break
+                elif test_list.count(tile) < 3:
+                    break
                 else:  # because sorted so if appears more than twice has to be part of triplet?
                     test_list.remove(tile)
                     test_list.remove(tile)
                     test_list.remove(tile)
-            return True
+            if len(test_list) == 0:  # if while loop terminated naturally then valid win
+                return True
 
         return False
 
@@ -259,7 +264,7 @@ try:
     while not check_for_win(last_discarded) and len(all_tiles) > 0:
 
         peng, new_player_number = check_for_peng(last_discarded)
-        if peng:  #changed to allow for pen
+        if peng:  # changed to allow for pen
             print("Player" + str(new_player_number))
             players[new_player_number].print_player_tiles()
             print("You can peng. Would you like to peng? (Enter 1 if yes, 0 if no): ")
@@ -278,16 +283,16 @@ try:
             print("You can chi. Would you like to chi? (Enter 1 if yes, 0 if no): ")
             yes = int(input())
             chi = chi and (yes == 1)
-        #TODO implement incase both is possible this can be similar to selection of which chi
+        # TODO implement incase both is possible this can be similar to selection of which chi
         # if peng and chi:
-            # print("You can peng or chi. Which would you like to do?(peng or chi)")
-            # response = input()
-            # if response == 'peng':
-            #     peng = True
-            #     chi = False
-            # else:
-            #     chi = True
-            #     peng = False
+        # print("You can peng or chi. Which would you like to do?(peng or chi)")
+        # response = input()
+        # if response == 'peng':
+        #     peng = True
+        #     chi = False
+        # else:
+        #     chi = True
+        #     peng = False
 
         if peng and not chi:
             players[player_number].peng(last_discarded)

@@ -156,7 +156,9 @@ class Player:
             # remaining is either part of sequence or part of triplet
             while len(test_list) > 0:
                 tile = test_list[0]
-                if test_list.count(tile) < 3:
+                if test_list.count(tile) < 3 and (
+                    tile.suit_type in ["Numbers", "Bamboo", "Circles"]
+                ):
                     tile2 = Tile(tile.suit_type, str(int(tile.value) + 1))
                     tile3 = Tile(tile.suit_type, str(int(tile.value) + 2))
                     if tile2 in test_list and tile3 in test_list:
@@ -164,12 +166,15 @@ class Player:
                         test_list.remove(tile2)
                         test_list.remove(tile3)
                     else:
-                        return False
+                        break
+                elif test_list.count(tile) < 3:
+                    break
                 else:  # because sorted so if appears more than twice has to be part of triplet?
                     test_list.remove(tile)
                     test_list.remove(tile)
                     test_list.remove(tile)
-            return True
+            if len(test_list) == 0:  # if while loop terminated naturally then valid win
+                return True
 
         return False
 
@@ -278,7 +283,7 @@ try:
                 players[player_number].print_player_tiles()
                 print("You can chi. Would you like to chi? (Enter 1 if yes, 0 if no): ")
                 yes = int(input())
-            else: # bot will always choose not to chi because not coded which sequence it will take the tile for
+            else:  # bot will always choose not to chi because not coded which sequence it will take the tile for
                 # yes = random.randint(0, 1)
                 yes = False
             chi = chi and (yes == 1)
