@@ -72,6 +72,7 @@ def player_one_graphics(player_one, screen):
         players_tiles = pygame.image.load(
             "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
         )
+        #TODO animate the selection for chi and discard
         # Attempt at making the selected tile shift up
         # if i != pos:
         #     players_tiles = pygame.transform.scale(
