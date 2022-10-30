@@ -294,7 +294,7 @@ try:
         #     chi = True
         #     peng = False
 
-        if peng and not chi:
+        if peng:
             players[player_number].peng(last_discarded)
             last_discarded = players[player_number].discard()
 
