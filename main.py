@@ -36,53 +36,53 @@ new = True
 graphics.player_one_graphics(players[0].hidden_tiles, screen)
 graphics.comp_graphics(screen)
 
-try:
-    while not gameplay.check_for_win(last_discarded) and len(all_tiles) > 0 and running:
+# try:
+while not gameplay.check_for_win(last_discarded) and len(all_tiles) > 0 and running:
 
-        if player_number == 0:
-            graphics.player_one_graphics(players[player_number], screen)
-            if new:
-                new_tile = gameplay.pickup_tile(all_tiles)
-                players[player_number].hidden_tiles.append(new_tile)
-                new = False
-
-        else:
-            time.sleep(1)
+    if player_number == 0:
+        graphics.player_one_graphics(players[player_number].hidden_tiles, screen)
+        if new:
             new_tile = gameplay.pickup_tile(all_tiles)
             players[player_number].hidden_tiles.append(new_tile)
-            last_discarded = players[player_number].discard()
-            graphics.discard_graphics(screen, last_discarded, discarded_tiles)
-            player_number = (player_number + 1) % 4
-            new = True
+            new = False
 
-        for event in pygame.event.get():
-            if event.type == KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
-            elif event.type == QUIT:
+    else:
+        time.sleep(1)
+        new_tile = gameplay.pickup_tile(all_tiles)
+        players[player_number].hidden_tiles.append(new_tile)
+        last_discarded = players[player_number].discard()
+        graphics.discard_graphics(screen, last_discarded, discarded_tiles)
+        player_number = (player_number + 1) % 4
+        new = True
+
+    for event in pygame.event.get():
+        if event.type == KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
                 running = False
+        elif event.type == QUIT:
+            running = False
 
-            if player_number == 0:
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    mouse = pygame.mouse.get_pos()
-                    if event.button == 1:
-                        pos = graphics.tile_coordinates(mouse)
-                        if isinstance(pos, int):
-                            last_discarded = players[player_number].hidden_tiles[pos]
-                            discarded_tiles.append(last_discarded)
-                            graphics.discard_graphics(
-                                screen, last_discarded, discarded_tiles
-                            )
-                            players[player_number].hidden_tiles.remove(last_discarded)
-                            graphics.clear_screen(screen, discarded_tiles)
-                            graphics.player_one_graphics(
-                                players[player_number].hidden_tiles, screen
-                            )
-                            player = (player + 1) % 4
-                            new = True
+        if player_number == 0:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse = pygame.mouse.get_pos()
+                if event.button == 1:
+                    pos = graphics.tile_coordinates(mouse)
+                    if isinstance(pos, int):
+                        last_discarded = players[player_number].hidden_tiles[pos]
+                        discarded_tiles.append(last_discarded)
+                        graphics.discard_graphics(
+                            screen, last_discarded, discarded_tiles
+                        )
+                        players[player_number].hidden_tiles.remove(last_discarded)
+                        graphics.clear_screen(screen, discarded_tiles)
+                        graphics.player_one_graphics(
+                            players[player_number].hidden_tiles, screen
+                        )
+                        player_number = (player_number + 1) % 4
+                        new = True
 
-    if len(all_tiles) == 0:
-        print("Nobody won")
+if len(all_tiles) == 0:
+    print("Nobody won")
 
-except Exception as e:
-    print(e)
+# except Exception as e:
+#     print(e)
