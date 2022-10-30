@@ -33,7 +33,7 @@ last_discarded = float("NaN")
 running = True
 new = True
 
-graphics.player_one_graphics(players[0], screen)
+graphics.player_one_graphics(players[0].hidden_tiles, screen)
 graphics.comp_graphics(screen)
 
 try:

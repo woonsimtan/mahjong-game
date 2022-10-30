@@ -61,14 +61,14 @@ def size_values(width, height):
 
 
 # Player 1 tile display
-def player_one_graphics(players, screen):
+def player_one_graphics(player_one, screen):
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
     tile_width, tile_height = size_values(50.0, 80.0)
-    for i in range(len(players)):
+    for i in range(len(player_one)):
 
-        tiles = players[i]
+        tiles = player_one[i]
         players_tiles = pygame.image.load(
             "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
         )
