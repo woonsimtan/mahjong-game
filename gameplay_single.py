@@ -272,10 +272,19 @@ last_discarded = float("NaN")
 #     while not check_for_win(last_discarded) and len(all_tiles) > 0:
 
 #         peng, new_player_number = check_for_peng(last_discarded)
-#         if peng:  # assume if can peng always peng
-#             player_number = new_player_number
-#             players[player_number].peng(last_discarded)
-#             last_discarded = players[player_number].discard()
+#         if peng:
+#             if new_player_number == 0:
+#                 players[new_player_number].print_player_tiles()
+#                 print(
+#                     "You can peng. Would you like to peng? (Enter 1 if yes, 0 if no): "
+#                 )
+#                 yes = int(input())
+#             else:  # assume bot will always choose to peng
+#                 # yes = random.randint(0, 1)
+#                 yes = 1
+#             peng = peng and (yes == 1)
+#             if peng:
+#                 player_number = new_player_number
 
 #         chi = check_for_chi(players[player_number].hidden_tiles, last_discarded)
 #         if chi:
@@ -285,8 +294,12 @@ last_discarded = float("NaN")
 #                 yes = int(input())
 #             else:  # bot will always choose not to chi because not coded which sequence it will take the tile for
 #                 # yes = random.randint(0, 1)
-#                 yes = False
+#                 yes = 0
 #             chi = chi and (yes == 1)
+
+#         if peng:
+#             players[player_number].peng(last_discarded)
+#             last_discarded = players[player_number].discard()
 
 #         if not peng and chi:
 #             players[player_number].chi(last_discarded)
