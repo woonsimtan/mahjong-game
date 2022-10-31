@@ -13,7 +13,6 @@ The game is built using pygame and is semi-functional:
 [//]: # (Hello)
 Known BUGS:
 - player should not be able to peng on a tile that they discarded themselves
-- players are forced to peng if possible - don't have a choice
 
 [//]: # (Hello)
 TODO:
