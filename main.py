@@ -130,9 +130,7 @@ if __name__ == "__main__":
                                 graphics.discard_graphics(
                                     screen, discarded_tiles[-1], discarded_tiles
                                 )
-                                tiles = gameplay.sort_tile_list(
-                                    players[player_number].hidden_tiles
-                                )
+                                tiles = gameplay.sort_tile_list(players[0].hidden_tiles)
                                 graphics.player_one_graphics(
                                     tiles, players[0].displayed_tiles, screen
                                 )

@@ -181,10 +181,11 @@ def clear_screen(screen):
 
     GREEN = (0, 105, 53)
     display_info = pygame.display.Info()
-    tile_width, tile_height = size_values(50.0, 80.0)
-    margin_top = display_info.current_h - tile_height - 60
-    margin_right = display_info.current_w / 2 - 7 * tile_width + tile_width * 13
-    screen.fill(GREEN, (margin_right, margin_top, tile_width, tile_height))
+    # tile_width, tile_height = size_values(50.0, 80.0)
+    # margin_top = display_info.current_h - tile_height - 60
+    # margin_right = display_info.current_w / 2 - 7 * tile_width + tile_width * 13
+    # screen.fill(GREEN, (margin_right, margin_top, tile_width, tile_height))
+    screen.fill(GREEN)
     # comp_graphics(screen)
     return screen
 
@@ -215,15 +216,15 @@ def generate_buttons(screen, peng, gong, chi):
     # Places the text
     peng_button_rect.center = (
         SCREEN_WIDTH - 2 * tile_height,
-        SCREEN_HEIGHT - 5 * tile_height,
+        SCREEN_HEIGHT - 3 * tile_height,
     )
     gong_button_rect.center = (
         SCREEN_WIDTH - 3 * tile_height,
-        SCREEN_HEIGHT - 2 * tile_height,
+        SCREEN_HEIGHT - 3 * tile_height,
     )
     chi_button_rect.center = (
         SCREEN_WIDTH - 4 * tile_height,
-        SCREEN_HEIGHT - 2 * tile_height,
+        SCREEN_HEIGHT - 3 * tile_height,
     )
     # hu_button_rect.center = (SCREEN_WIDTH - 5 *tile_height, SCREEN_HEIGHT - 2*tile_height)
     if peng:
