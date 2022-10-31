@@ -106,41 +106,43 @@ if __name__ == "__main__":
                 running = False
 
             # during user turn
-            if player_number == 0:
+            if player_number != 0:
+                break
                 # if user clicks
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    mouse = pygame.mouse.get_pos()
-                    if event.button == 1:  # if left clicked
-                        pos = graphics.tile_coordinates(mouse)
-                        if isinstance(
-                            pos, int
-                        ):  # pos only integer if clicked in tile range
-                            # get tile at position
-                            if pos < len(players[player_number].hidden_tiles):
-                                last_discarded = gameplay.sort_tile_list(
-                                    players[player_number].hidden_tiles
-                                )[pos]
-                                # add to list of discarded
-                                discarded_tiles.append(last_discarded)
-                                graphics.discard_graphics(
-                                    screen,  discarded_tiles
-                                )
-                                # remove from user's tiles and update graphics
-                                players[player_number].hidden_tiles.remove(
-                                    last_discarded
-                                )
+            if event.type != pygame.MOUSEBUTTONDOWN:
+                break
+            mouse = pygame.mouse.get_pos()
+            if event.button == 1:  # if left clicked
+                pos = graphics.tile_coordinates(mouse)
+                if isinstance(
+                    pos, int
+                ):  # pos only integer if clicked in tile range
+                    # get tile at position
+                    if pos < len(players[player_number].hidden_tiles):
+                        last_discarded = gameplay.sort_tile_list(
+                            players[player_number].hidden_tiles
+                        )[pos]
+                        # add to list of discarded
+                        discarded_tiles.append(last_discarded)
+                        graphics.discard_graphics(
+                            screen,  discarded_tiles
+                        )
+                        # remove from user's tiles and update graphics
+                        players[player_number].hidden_tiles.remove(
+                            last_discarded
+                        )
 
-                                graphics.clear_screen(screen)
-                                graphics.comp_graphics(players, screen)
-                                graphics.discard_graphics(
-                                    screen, discarded_tiles
-                                )
-                                tiles = gameplay.sort_tile_list(players[0].hidden_tiles)
-                                graphics.player_one_graphics(
-                                    tiles, players[0].displayed_tiles, screen
-                                )
-                                player_number = (player_number + 1) % 4
-                                new = True
+                        graphics.clear_screen(screen)
+                        graphics.comp_graphics(players, screen)
+                        graphics.discard_graphics(
+                            screen, discarded_tiles
+                        )
+                        tiles = gameplay.sort_tile_list(players[0].hidden_tiles)
+                        graphics.player_one_graphics(
+                            tiles, players[0].displayed_tiles, screen
+                        )
+                        player_number = (player_number + 1) % 4
+                        new = True
 
     if gameplay.check_for_win(players, last_discarded):
         print("somebody won")
