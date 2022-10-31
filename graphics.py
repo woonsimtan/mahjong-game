@@ -47,18 +47,22 @@ def player_one_graphics(hidden, displayed, screen):
     for i in range(len(hidden + displayed)):
         if i < len(hidden):
             tiles = hidden[i]
+            # tile_scale = 1
         else:
             tiles = displayed[i - len(hidden)]
+            # tile_scale = 0.9
+
         players_tiles = pygame.image.load(
             "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
         )
         players_tiles = pygame.transform.scale(players_tiles, (tile_width, tile_height))
+        # players_tiles = pygame.transform.rotozoom(players_tiles, 0, tile_scale)
         screen.blit(
             players_tiles,
             (
                 SCREEN_WIDTH / 2.0 - tile_width * 7 + i * tile_width,
                 SCREEN_HEIGHT - tile_height - 60,
-            ),
+            )
         )
     pygame.display.update()
 
@@ -213,7 +217,7 @@ def clear_screen(screen):
     return screen
 
 
-def generate_buttons(screen, peng, gong, chi):
+def generate_buttons(screen, peng, chi):
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
@@ -225,35 +229,35 @@ def generate_buttons(screen, peng, gong, chi):
 
     # Game Buttons
     peng_button = large_font.render("Peng", True, WHITE)
-    gong_button = large_font.render("Gong", True, WHITE)
+    # gong_button = large_font.render("Gong", True, WHITE)
     chi_button = large_font.render("Chi", True, WHITE)
     # hu_button = large_font.render("Hu", True, WHITE)
 
     # Gets_rectangular covering of text
     peng_button_rect = peng_button.get_rect()
-    gong_button_rect = gong_button.get_rect()
+    # gong_button_rect = gong_button.get_rect()
     chi_button_rect = chi_button.get_rect()
     # hu_button_rect = hu_button.get_rect()
 
     tile_height = 80  # edit this!
     # Places the text
     peng_button_rect.center = (
-        SCREEN_WIDTH - 2 * tile_height,
-        SCREEN_HEIGHT - 2 * tile_height,
+        SCREEN_WIDTH - 4 * tile_height,
+        SCREEN_HEIGHT - 3 * tile_height,
     )
-    gong_button_rect.center = (
-        SCREEN_WIDTH - 3 * tile_height,
-        SCREEN_HEIGHT - 2 * tile_height,
-    )
+    # gong_button_rect.center = (
+    #     SCREEN_WIDTH - 3 * tile_height,
+    #     SCREEN_HEIGHT - 2 * tile_height,
+    # )
     chi_button_rect.center = (
         SCREEN_WIDTH - 4 * tile_height,
-        SCREEN_HEIGHT - 2 * tile_height,
+        SCREEN_HEIGHT - 5 * tile_height,
     )
     # hu_button_rect.center = (SCREEN_WIDTH - 5 *tile_height, SCREEN_HEIGHT - 2*tile_height)
     if peng:
         screen.blit(peng_button, peng_button_rect)
-    if gong:
-        screen.blit(gong_button, gong_button_rect)
+    # if gong:
+    #     screen.blit(gong_button, gong_button_rect)
     if chi:
         screen.blit(chi_button, chi_button_rect)
     # screen.blit(hu_button, hu_button_rect)

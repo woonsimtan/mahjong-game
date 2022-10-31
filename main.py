@@ -49,6 +49,7 @@ if __name__ == "__main__":
         peng, new_player_number = gameplay.check_for_peng(players, last_discarded)
         # always assume peng if possible
         if peng:
+            graphics.generate_buttons(screen, peng, False)
             player_number = new_player_number
             players[player_number].peng(last_discarded)
             discarded_tiles.remove(last_discarded)
@@ -60,6 +61,7 @@ if __name__ == "__main__":
             if peng:
                 # don't need to pick up new tile
                 new = False
+                
 
             if new:  # if need to pick up a new tile
                 new_tile = gameplay.pickup_tile(all_tiles)
