@@ -67,29 +67,32 @@ def player_one_graphics(hidden, displayed, screen):
     pygame.display.update()
 
 
-def discard_graphics(screen, tiles, discarded_tiles):
+def discard_graphics(screen, discarded_tiles):
+    tiles = discarded_tiles.copy()
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
-    tile = pygame.image.load(
-        "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
-    )
-    tile_width, tile_height = size_values(25.0, 45.0)
-    tile = pygame.transform.scale(tile, (tile_width, tile_height))
-    # The row and column determined is from the fact that there are 148 Mahjong tiles
-    # If there is a draw then there will be 96 tiles left
-    total_row = 8
-    total_column = 12
+    while len(tiles) > 0:
+        discarded = tiles.pop()
+        tile = pygame.image.load(
+            "./mahjong-tiles/" + discarded.suit_type + discarded.value + ".jpg"
+        )
 
-    tile_pos = len(discarded_tiles) - 1
-    tile_row = tile_pos // total_column
-    tile_column = tile_pos % total_column
-    margin_left = SCREEN_WIDTH / 2 - (total_column / 2) * tile_width
-    margin_top = SCREEN_HEIGHT / 2 - (total_row / 2) * tile_height
-    pos_width = margin_left + tile_width * tile_column
-    pos_height = margin_top + tile_height * tile_row
-    screen.blit(tile, (pos_width, pos_height))
+        tile_width, tile_height = size_values(25.0, 45.0)
+        tile = pygame.transform.scale(tile, (tile_width, tile_height))
+        # The row and column determined is from the fact that there are 148 Mahjong tiles
+        # If there is a draw then there will be 96 tiles left
+        total_row = 8
+        total_column = 12
 
+        tile_pos = len(tiles)
+        tile_row = tile_pos // total_column
+        tile_column = tile_pos % total_column
+        margin_left = SCREEN_WIDTH / 2 - (total_column / 2) * tile_width
+        margin_top = SCREEN_HEIGHT / 2 - (total_row / 2) * tile_height
+        pos_width = margin_left + tile_width * tile_column
+        pos_height = margin_top + tile_height * tile_row
+        screen.blit(tile, (pos_width, pos_height))
     pygame.display.update()
 
 
@@ -101,33 +104,6 @@ def comp_graphics(players, screen):
     tile_backing = pygame.image.load("./mahjong-tiles/back.jpg")
     tile_backing = pygame.transform.scale(tile_backing, (tile_width, tile_height))
     tile_backing_sides = pygame.transform.rotate(tile_backing, 90)
-
-    # for i in range(1, 4):
-    #     if i == 2:
-    #         x = SCREEN_WIDTH / 2 - tile_width * 6.5 + j * tile_width
-    #         y = 0
-    #     elif i == 3:
-    #         x = SCREEN_WIDTH - tile_height
-    #         y = SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width
-    #     elif i == 1:
-    #         x = 0
-    #         y = SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width
-
-    #     for hidden in players[i].hidden_tiles:
-    #         if i % 2 == 1:
-    #             screen.blit(tile_backing_sides, (x, y))
-    #         else:
-    #             screen.blit(tile_backing, (x, y))
-
-    #     for displayed in players[i].displayed_tiles:
-    #         tile = pygame.image.load(
-    #             "./mahjong-tiles/" + displayed.suit_type + displayed.value + ".jpg"
-    #         )
-    #         tile = pygame.transform.scale(tile, (tile_width, tile_height))
-    #         if i % 2 == 1:
-    #             tile = pygame.transform.rotate(tile, 90)
-    #         screen.blit(tile, (x, y))
-
     for j in range(13):
         # top row - player 2
         if j < len(players[2].hidden_tiles):
@@ -135,6 +111,7 @@ def comp_graphics(players, screen):
                 tile_backing,
                 (SCREEN_WIDTH / 2 - tile_width * 6.5 + j * tile_width, 0),
             )
+        # elif j - len(players[2].hidden_tiles) < len(players[2].displayed_tiles):
         else:
             displayed = players[2].displayed_tiles[j - len(players[2].hidden_tiles)]
             tile = pygame.image.load(
@@ -155,6 +132,7 @@ def comp_graphics(players, screen):
                 ),
             )
         else:
+            # elif j - len(players[3].hidden_tiles) < len(players[3].displayed_tiles):
             displayed = players[3].displayed_tiles[j - len(players[3].hidden_tiles)]
             tile = pygame.image.load(
                 "./mahjong-tiles/" + displayed.suit_type + displayed.value + ".jpg"
@@ -175,6 +153,7 @@ def comp_graphics(players, screen):
                 (0, SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width),
             )
         else:
+            # elif j - len(players[1].hidden_tiles) < len(players[1].displayed_tiles):
             displayed = players[1].displayed_tiles[j - len(players[1].hidden_tiles)]
             tile = pygame.image.load(
                 "./mahjong-tiles/" + displayed.suit_type + displayed.value + ".jpg"
@@ -209,10 +188,11 @@ def clear_screen(screen):
 
     GREEN = (0, 105, 53)
     display_info = pygame.display.Info()
-    tile_width, tile_height = size_values(50.0, 80.0)
-    margin_top = display_info.current_h - tile_height - 60
-    margin_right = display_info.current_w / 2 - 7 * tile_width + tile_width * 13
-    screen.fill(GREEN, (margin_right, margin_top, tile_width, tile_height))
+    # tile_width, tile_height = size_values(50.0, 80.0)
+    # margin_top = display_info.current_h - tile_height - 60
+    # margin_right = display_info.current_w / 2 - 7 * tile_width + tile_width * 13
+    # screen.fill(GREEN, (margin_right, margin_top, tile_width, tile_height))
+    screen.fill(GREEN)
     # comp_graphics(screen)
     return screen
 
@@ -245,13 +225,13 @@ def generate_buttons(screen, peng, chi):
         SCREEN_WIDTH - 4 * tile_height,
         SCREEN_HEIGHT - 3 * tile_height,
     )
-    # gong_button_rect.center = (
-    #     SCREEN_WIDTH - 3 * tile_height,
-    #     SCREEN_HEIGHT - 2 * tile_height,
-    # )
+    gong_button_rect.center = (
+        SCREEN_WIDTH - 3 * tile_height,
+        SCREEN_HEIGHT - 3 * tile_height,
+    )
     chi_button_rect.center = (
-        SCREEN_WIDTH - 4 * tile_height,
-        SCREEN_HEIGHT - 5 * tile_height,
+        SCREEN_WIDTH - 5 * tile_height,
+        SCREEN_HEIGHT - 3 * tile_height,
     )
     # hu_button_rect.center = (SCREEN_WIDTH - 5 *tile_height, SCREEN_HEIGHT - 2*tile_height)
     if peng:
