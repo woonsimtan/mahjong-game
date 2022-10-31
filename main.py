@@ -40,6 +40,7 @@ graphics.comp_graphics(screen)
 while not gameplay.check_for_win(last_discarded) and len(all_tiles) > 0 and running:
 
     if player_number == 0:
+        players[player_number].hidden_tiles=gameplay.sort_tile_list(players[player_number].hidden_tiles)
         graphics.player_one_graphics(players[player_number].hidden_tiles, screen)
         if new:
             new_tile = gameplay.pickup_tile(all_tiles)
