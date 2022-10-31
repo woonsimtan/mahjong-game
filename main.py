@@ -51,26 +51,39 @@ if __name__ == "__main__":
         # check for peng
         peng, new_player_number = gameplay.check_for_peng(players, last_discarded)
         # always assume peng if possible
-        if peng:  # BUG:should not be able to peng on tile that user discarded
+        if (
+            peng and new_player_number != 0
+        ):  # BUG:should not be able to peng on tile that user discarded
             player_number = new_player_number
             players[player_number].peng(last_discarded)
             last_discarded = discarded_tiles.pop()
-        else:
-            peng = False
+        elif peng:
+            graphics.generate_buttons(screen, peng, False, False)
+            time.sleep(1)
+            print("A")
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse = pygame.mouse.get_pos()
+                    if event.button == 1:  # if left clicked
+                        if graphics.clicked_on_discarded(mouse, discarded_tiles):
+                            player_number = new_player_number
+                            players[player_number].peng(last_discarded)
+                            last_discarded = discarded_tiles.pop()
+                            new = False
+                        else:
+                            new = True
 
         if player_number == 0:  # if user
             # display user tiles
             tiles = gameplay.sort_tile_list(players[player_number].hidden_tiles)
             graphics.player_one_graphics(tiles, players[0].displayed_tiles, screen)
-            if peng:
-                graphics.generate_buttons(screen, peng, False, False)
+            # if peng:
 
-                #
-                # player_number = new_player_number
-                # players[player_number].peng(last_discarded)
-                # discarded_tiles.remove(last_discarded)
-                # don't need to pick up new tile
-                new = False
+            #
+            # player_number = new_player_number
+            # players[player_number].peng(last_discarded)
+            # discarded_tiles.remove(last_discarded)
+            # don't need to pick up new tile
 
             if new:  # if need to pick up a new tile
                 new_tile = gameplay.pickup_tile(all_tiles)
@@ -87,6 +100,9 @@ if __name__ == "__main__":
             last_discarded = players[player_number].discard()
             discarded_tiles.append(last_discarded)
             graphics.discard_graphics(screen, discarded_tiles)
+            for player in players:
+                print(players.index(player))
+                print(len(player.hidden_tiles + player.displayed_tiles))
             graphics.comp_graphics(players, screen)
             # next player
             player_number = (player_number + 1) % 4
@@ -117,9 +133,7 @@ if __name__ == "__main__":
                                 )[pos]
                                 # add to list of discarded
                                 discarded_tiles.append(last_discarded)
-                                graphics.discard_graphics(
-                                    screen,  discarded_tiles
-                                )
+                                graphics.discard_graphics(screen, discarded_tiles)
                                 # remove from user's tiles and update graphics
                                 players[player_number].hidden_tiles.remove(
                                     last_discarded
@@ -127,9 +141,7 @@ if __name__ == "__main__":
 
                                 graphics.clear_screen(screen)
                                 graphics.comp_graphics(players, screen)
-                                graphics.discard_graphics(
-                                    screen, discarded_tiles
-                                )
+                                graphics.discard_graphics(screen, discarded_tiles)
                                 tiles = gameplay.sort_tile_list(players[0].hidden_tiles)
                                 graphics.player_one_graphics(
                                     tiles, players[0].displayed_tiles, screen

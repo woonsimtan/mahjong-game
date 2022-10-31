@@ -63,6 +63,32 @@ def player_one_graphics(hidden, displayed, screen):
     pygame.display.update()
 
 
+def clicked_on_discarded(coord, discarded_tiles):
+    total_row = 8
+    total_column = 12
+    tile_width, tile_height = size_values(25.0, 45.0)
+    display_info = pygame.display.Info()
+    SCREEN_HEIGHT = display_info.current_h
+    SCREEN_WIDTH = display_info.current_w
+    margin_left = SCREEN_WIDTH / 2 - (total_column / 2) * tile_width
+    margin_top = SCREEN_HEIGHT / 2 - (total_row / 2) * tile_height
+    tile_row = len(discarded_tiles) // total_column
+    tile_column = len(discarded_tiles) % total_column
+    x_min = margin_left + tile_width * tile_column  # x-coordinate of top left corner
+    x_max = x_min + tile_width
+    y_max = margin_top + tile_height * tile_row  # y-coordinate of top left corner
+    y_min = y_max - tile_height
+    if (
+        coord[0] >= x_min
+        and coord[0] < x_max
+        and coord[1] >= y_min
+        and coord[1] < y_max
+    ):
+        return True
+    else:
+        return False
+
+
 def discard_graphics(screen, discarded_tiles):
     tiles = discarded_tiles.copy()
     display_info = pygame.display.Info()
@@ -86,8 +112,12 @@ def discard_graphics(screen, discarded_tiles):
         tile_column = tile_pos % total_column
         margin_left = SCREEN_WIDTH / 2 - (total_column / 2) * tile_width
         margin_top = SCREEN_HEIGHT / 2 - (total_row / 2) * tile_height
-        pos_width = margin_left + tile_width * tile_column
-        pos_height = margin_top + tile_height * tile_row
+        pos_width = (
+            margin_left + tile_width * tile_column
+        )  # x-coordinate of top left corner
+        pos_height = (
+            margin_top + tile_height * tile_row
+        )  # y-coordinate of top left corner
         screen.blit(tile, (pos_width, pos_height))
     pygame.display.update()
 
