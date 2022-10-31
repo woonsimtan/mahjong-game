@@ -59,19 +59,19 @@ if __name__ == "__main__":
             last_discarded = discarded_tiles.pop()
         elif peng:
             graphics.generate_buttons(screen, peng, False, False)
-            time.sleep(1)
-            print("A")
             for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    mouse = pygame.mouse.get_pos()
-                    if event.button == 1:  # if left clicked
-                        if graphics.clicked_on_discarded(mouse, discarded_tiles):
-                            player_number = new_player_number
-                            players[player_number].peng(last_discarded)
-                            last_discarded = discarded_tiles.pop()
-                            new = False
-                        else:
-                            new = True
+                if player_number == 0:
+                    print("B")
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        mouse = pygame.mouse.get_pos()
+                        if event.button == 1:  # if left clicked
+                            if graphics.clicked_on_discarded(mouse, discarded_tiles):
+                                player_number = new_player_number
+                                players[player_number].peng(last_discarded)
+                                last_discarded = discarded_tiles.pop()
+                                new = False
+                            else:
+                                new = True
 
         if player_number == 0:  # if user
             # display user tiles
@@ -100,9 +100,9 @@ if __name__ == "__main__":
             last_discarded = players[player_number].discard()
             discarded_tiles.append(last_discarded)
             graphics.discard_graphics(screen, discarded_tiles)
-            for player in players:
-                print(players.index(player))
-                print(len(player.hidden_tiles + player.displayed_tiles))
+            # for player in players:
+            #     print(players.index(player))
+            #     print(len(player.hidden_tiles + player.displayed_tiles))
             graphics.comp_graphics(players, screen)
             # next player
             player_number = (player_number + 1) % 4
