@@ -133,7 +133,6 @@ class Player:
     # #     self.displayed_tiles.append([tile, tile, tile, tile])
 
     def win(self, new_tile):
-        # TODO: test this!
         # win by any 4 sets of 3 and a pair
         # know displayed tiles are already sets of 3
         # so only need to check hidden tiles
@@ -203,7 +202,7 @@ def pickup_tile(all_tiles):
     return all_tiles.pop(0)
 
 
-def check_for_win(discarded_tile):
+def check_for_win(players, discarded_tile):
     if discarded_tile != discarded_tile:
         return False
     for player in players:
@@ -246,7 +245,7 @@ def check_for_peng(players, discarded_tile):
         return False, float("NaN")
     for player in players:
         if player.hidden_tiles.count(discarded_tile) >= 2:
-            print("Player " + str(players.index(player)) + " PENG")
+            # print("Player " + str(players.index(player)) + " PENG")
             return True, players.index(player)
     return False, float("NaN")
 
@@ -269,7 +268,7 @@ last_discarded = float("NaN")
 if __name__ == "__main__":
     # gameplay for single round
     try:
-        while not check_for_win(last_discarded) and len(all_tiles) > 0:
+        while not check_for_win(players, last_discarded) and len(all_tiles) > 0:
 
             peng, new_player_number = check_for_peng(players, last_discarded)
             if peng:
