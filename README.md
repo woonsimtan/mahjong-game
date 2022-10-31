@@ -2,7 +2,7 @@
 First attempted in OxfordHack 2022\
 \
 Goal:
-Singaporean/Malaysian Mahjong that follows rules according to: http://www.singaporemahjong.com/rules/ 
+Singaporean/Malaysian Mahjong that follows rules according to: http://www.singaporemahjong.com/rules/ \
 (currently slightly more similar to SzeChuan mahjong since unable to chi)\
 \
 The game is built using pygame and is semi-functional:
