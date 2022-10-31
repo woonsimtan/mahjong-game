@@ -72,12 +72,15 @@ def clicked_on_discarded(coord, discarded_tiles):
     SCREEN_WIDTH = display_info.current_w
     margin_left = SCREEN_WIDTH / 2 - (total_column / 2) * tile_width
     margin_top = SCREEN_HEIGHT / 2 - (total_row / 2) * tile_height
-    tile_row = len(discarded_tiles) // total_column
-    tile_column = len(discarded_tiles) % total_column
+    tile_row = (len(discarded_tiles) - 1) // total_column + 1
+    tile_column = (len(discarded_tiles) - 1) % total_column
     x_min = margin_left + tile_width * tile_column  # x-coordinate of top left corner
     x_max = x_min + tile_width
     y_max = margin_top + tile_height * tile_row  # y-coordinate of top left corner
     y_min = y_max - tile_height
+    print(x_min, x_max)
+    print(y_min, y_max)
+    print(coord[0], coord[1])
     if (
         coord[0] >= x_min
         and coord[0] < x_max

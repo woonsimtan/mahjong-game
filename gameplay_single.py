@@ -246,7 +246,7 @@ def check_for_peng(players, discarded_tile):
         return False, float("NaN")
     for player in players:
         if player.hidden_tiles.count(discarded_tile) >= 2:
-            print("Player " + str(players.index(player)) + " PENG")
+            # print("Player " + str(players.index(player)) + " PENG")
             return True, players.index(player)
     return False, float("NaN")
 

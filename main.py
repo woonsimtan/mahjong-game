@@ -32,6 +32,7 @@ discarded_tiles = []
 last_discarded = float("NaN")
 running = True
 new = True
+should_pass = False
 
 if __name__ == "__main__":
 
@@ -47,66 +48,86 @@ if __name__ == "__main__":
         and len(all_tiles) > 0
         and running
     ):
+        if not should_pass:
+            # check for peng
+            peng, new_player_number = gameplay.check_for_peng(players, last_discarded)
+            # BUG:should not be able to peng on tile that user discarded
 
-        # check for peng
-        peng, new_player_number = gameplay.check_for_peng(players, last_discarded)
-        # always assume peng if possible
-        if (
-            peng and new_player_number != 0
-        ):  # BUG:should not be able to peng on tile that user discarded
+            graphics.generate_buttons(
+                screen, peng and (new_player_number == 0), False, False
+            )
+        else:
+            peng = False
+            new_player_number = float("NaN")
+
+        if peng and new_player_number != 0:  # bots always assume peng if possible
+            time.sleep(1)
             player_number = new_player_number
             players[player_number].peng(last_discarded)
             last_discarded = discarded_tiles.pop()
-        elif peng:
-            graphics.generate_buttons(screen, peng, False, False)
-            for event in pygame.event.get():
-                if player_number == 0:
-                    print("B")
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        mouse = pygame.mouse.get_pos()
-                        if event.button == 1:  # if left clicked
-                            if graphics.clicked_on_discarded(mouse, discarded_tiles):
-                                player_number = new_player_number
-                                players[player_number].peng(last_discarded)
-                                last_discarded = discarded_tiles.pop()
-                                new = False
-                            else:
-                                new = True
 
-        if player_number == 0:  # if user
-            # display user tiles
-            tiles = gameplay.sort_tile_list(players[player_number].hidden_tiles)
-            graphics.player_one_graphics(tiles, players[0].displayed_tiles, screen)
-            # if peng:
+        # elif peng and new_player_number == 0:
+        #     print("player can choose to peng")
 
-            #
-            # player_number = new_player_number
-            # players[player_number].peng(last_discarded)
-            # discarded_tiles.remove(last_discarded)
-            # don't need to pick up new tile
+        # # # skips this chunk
+        # for event in pygame.event.get():
+        #     print("in for loop")
+        #     if event.type == pygame.MOUSEBUTTONDOWN:
+        #         print("clicked")
+        #         mouse = pygame.mouse.get_pos()
+        #         if event.button == 1:  # if left clicked
+        #             if graphics.clicked_on_discarded(mouse, discarded_tiles):
+        #                 print("clicked on discarded")
+        #                 player_number = new_player_number
+        #                 players[player_number].peng(last_discarded)
+        #                 last_discarded = discarded_tiles.pop()
+        #                 new = False
+        #             else:
+        #                 print("chose not to peng")
+        #                 new = True
+        #                 peng = False
+        if (peng and new_player_number != 0) or not peng:
+            if player_number == 0:  # if user
+                # display user tiles
+                # print("player's turn")
+                tiles = gameplay.sort_tile_list(players[player_number].hidden_tiles)
+                graphics.player_one_graphics(tiles, players[0].displayed_tiles, screen)
+                # if peng:
 
-            if new:  # if need to pick up a new tile
-                new_tile = gameplay.pickup_tile(all_tiles)
-                players[player_number].hidden_tiles.append(new_tile)
-                new = False
+                #
+                # player_number = new_player_number
+                # players[player_number].peng(last_discarded)
+                # discarded_tiles.remove(last_discarded)
+                # don't need to pick up new tile
 
-        else:
-            # other users pick up a tile
-            if not peng:
-                time.sleep(1)
-                new_tile = gameplay.pickup_tile(all_tiles)
-                players[player_number].hidden_tiles.append(new_tile)
-            # discard a random tile
-            last_discarded = players[player_number].discard()
-            discarded_tiles.append(last_discarded)
-            graphics.discard_graphics(screen, discarded_tiles)
-            # for player in players:
-            #     print(players.index(player))
-            #     print(len(player.hidden_tiles + player.displayed_tiles))
-            graphics.comp_graphics(players, screen)
-            # next player
-            player_number = (player_number + 1) % 4
-            new = True
+                if new:  # if need to pick up a new tile
+                    print("player " + str(player_number) + " picks up")
+                    new_tile = gameplay.pickup_tile(all_tiles)
+                    players[player_number].hidden_tiles.append(new_tile)
+                    new = False
+
+            else:
+                # other users pick up a tile
+                if not peng:  # does not run if someone peng
+                    time.sleep(1)
+                    new_tile = gameplay.pickup_tile(all_tiles)
+                    players[player_number].hidden_tiles.append(new_tile)
+                    print("player " + str(player_number) + " picks up")
+
+                # this bit runs if peng = true and player_number != 0
+
+                # discard a random tile
+                last_discarded = players[player_number].discard()
+                discarded_tiles.append(last_discarded)
+                print("player " + str(player_number) + " discards")
+                graphics.discard_graphics(screen, discarded_tiles)
+                # for player in players:
+                #     print(players.index(player))
+                #     print(len(player.hidden_tiles + player.displayed_tiles))
+                graphics.comp_graphics(players, screen)
+                # next player
+                player_number = (player_number + 1) % 4
+                new = True
 
         for event in pygame.event.get():
             # exit game
@@ -115,6 +136,30 @@ if __name__ == "__main__":
                     running = False
             elif event.type == QUIT:
                 running = False
+
+                # try here?
+            if peng and new_player_number == 0:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    print("clicked")
+                    mouse = pygame.mouse.get_pos()
+                    if event.button == 1:  # if left clicked
+                        if graphics.clicked_on_discarded(mouse, discarded_tiles):
+                            print("clicked on discarded")
+                            player_number = new_player_number
+                            players[player_number].peng(last_discarded)
+                            last_discarded = discarded_tiles.pop()
+                            new = False
+                        else:
+                            print("chose not to peng")
+                            new = True
+                            should_pass = True
+                            graphics.clear_screen(screen)
+                            graphics.comp_graphics(players, screen)
+                            graphics.discard_graphics(screen, discarded_tiles)
+                            tiles = gameplay.sort_tile_list(players[0].hidden_tiles)
+                            graphics.player_one_graphics(
+                                tiles, players[0].displayed_tiles, screen
+                            )
 
             # during user turn
             if player_number == 0:
@@ -148,6 +193,7 @@ if __name__ == "__main__":
                                 )
                                 player_number = (player_number + 1) % 4
                                 new = True
+                                should_pass = False
 
     if gameplay.check_for_win(players, last_discarded):
         print("somebody won")
