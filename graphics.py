@@ -215,7 +215,7 @@ def generate_buttons(screen, peng, gong, chi):
     tile_height = 80  # edit this!
     # Places the text
     peng_button_rect.center = (
-        SCREEN_WIDTH - 2 * tile_height,
+        SCREEN_WIDTH - 4 * tile_height,
         SCREEN_HEIGHT - 3 * tile_height,
     )
     gong_button_rect.center = (
@@ -223,7 +223,7 @@ def generate_buttons(screen, peng, gong, chi):
         SCREEN_HEIGHT - 3 * tile_height,
     )
     chi_button_rect.center = (
-        SCREEN_WIDTH - 4 * tile_height,
+        SCREEN_WIDTH - 5 * tile_height,
         SCREEN_HEIGHT - 3 * tile_height,
     )
     # hu_button_rect.center = (SCREEN_WIDTH - 5 *tile_height, SCREEN_HEIGHT - 2*tile_height)
