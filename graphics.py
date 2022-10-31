@@ -63,29 +63,29 @@ def player_one_graphics(hidden, displayed, screen):
     pygame.display.update()
 
 
-def discard_graphics(screen, tiles, discarded_tiles):
+def discard_graphics(screen, discarded_tiles):
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
-    tile = pygame.image.load(
-        "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
-    )
-    tile_width, tile_height = size_values(25.0, 45.0)
-    tile = pygame.transform.scale(tile, (tile_width, tile_height))
-    # The row and column determined is from the fact that there are 148 Mahjong tiles
-    # If there is a draw then there will be 96 tiles left
-    total_row = 8
-    total_column = 12
+    for tiles in discarded_tiles:
+        tile = pygame.image.load(
+            "./mahjong-tiles/" + tiles.suit_type + tiles.value + ".jpg"
+        )
+        tile_width, tile_height = size_values(25.0, 45.0)
+        tile = pygame.transform.scale(tile, (tile_width, tile_height))
+        # The row and column determined is from the fact that there are 148 Mahjong tiles
+        # If there is a draw then there will be 96 tiles left
+        total_row = 8
+        total_column = 12
 
-    tile_pos = len(discarded_tiles) - 1
-    tile_row = tile_pos // total_column
-    tile_column = tile_pos % total_column
-    margin_left = SCREEN_WIDTH / 2 - (total_column / 2) * tile_width
-    margin_top = SCREEN_HEIGHT / 2 - (total_row / 2) * tile_height
-    pos_width = margin_left + tile_width * tile_column
-    pos_height = margin_top + tile_height * tile_row
-    screen.blit(tile, (pos_width, pos_height))
-
+        tile_pos = len(discarded_tiles) - 1
+        tile_row = tile_pos // total_column
+        tile_column = tile_pos % total_column
+        margin_left = SCREEN_WIDTH / 2 - (total_column / 2) * tile_width
+        margin_top = SCREEN_HEIGHT / 2 - (total_row / 2) * tile_height
+        pos_width = margin_left + tile_width * tile_column
+        pos_height = margin_top + tile_height * tile_row
+        screen.blit(tile, (pos_width, pos_height))
     pygame.display.update()
 
 

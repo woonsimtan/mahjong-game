@@ -86,7 +86,7 @@ if __name__ == "__main__":
             # discard a random tile
             last_discarded = players[player_number].discard()
             discarded_tiles.append(last_discarded)
-            graphics.discard_graphics(screen, last_discarded, discarded_tiles)
+            graphics.discard_graphics(screen, discarded_tiles)
             graphics.comp_graphics(players, screen)
             # next player
             player_number = (player_number + 1) % 4
@@ -118,7 +118,7 @@ if __name__ == "__main__":
                                 # add to list of discarded
                                 discarded_tiles.append(last_discarded)
                                 graphics.discard_graphics(
-                                    screen, last_discarded, discarded_tiles
+                                    screen,  discarded_tiles
                                 )
                                 # remove from user's tiles and update graphics
                                 players[player_number].hidden_tiles.remove(
@@ -128,7 +128,7 @@ if __name__ == "__main__":
                                 graphics.clear_screen(screen)
                                 graphics.comp_graphics(players, screen)
                                 graphics.discard_graphics(
-                                    screen, discarded_tiles[-1], discarded_tiles
+                                    screen, discarded_tiles
                                 )
                                 tiles = gameplay.sort_tile_list(players[0].hidden_tiles)
                                 graphics.player_one_graphics(
