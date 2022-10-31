@@ -264,7 +264,7 @@ try:
     while not check_for_win(last_discarded) and len(all_tiles) > 0:
 
         peng, new_player_number = check_for_peng(last_discarded)
-        if peng:  # changed to allow for pen
+        if peng:  # changed to allow for peng
             print("Player" + str(new_player_number))
             players[new_player_number].print_player_tiles()
             print("You can peng. Would you like to peng? (Enter 1 if yes, 0 if no): ")
@@ -272,9 +272,9 @@ try:
             peng = peng and (yes == 1)
             if peng:
                 player_number = new_player_number
-            # player_number = new_player_number
-            # players[player_number].peng(last_discarded)
-            # last_discarded = players[player_number].discard()
+            # # player_number = new_player_number
+            #     players[player_number].peng(last_discarded)
+            #     last_discarded = players[player_number].discard()
 
         chi = check_for_chi(players[player_number].hidden_tiles, last_discarded)
         if chi:
@@ -294,7 +294,7 @@ try:
         #     chi = True
         #     peng = False
 
-        if peng and not chi:
+        if peng:
             players[player_number].peng(last_discarded)
             last_discarded = players[player_number].discard()
 

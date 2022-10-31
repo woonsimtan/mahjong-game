@@ -241,7 +241,7 @@ def check_for_chi(player_tiles, discarded_tile):
     return False
 
 
-def check_for_peng(discarded_tile):
+def check_for_peng(players, discarded_tile):
     if discarded_tile != discarded_tile:
         return False, float("NaN")
     for player in players:
@@ -266,56 +266,71 @@ players, all_tiles = game_setup(all_tiles)
 discarded_tiles = []
 last_discarded = float("NaN")
 
+if __name__ == "__main__":
+    # gameplay for single round
+    try:
+        while not check_for_win(last_discarded) and len(all_tiles) > 0:
 
-# # gameplay for single round
-# try:
-#     while not check_for_win(last_discarded) and len(all_tiles) > 0:
+            peng, new_player_number = check_for_peng(players, last_discarded)
+            if peng:
+                if new_player_number == 0:
+                    players[new_player_number].print_player_tiles()
+                    print(
+                        "You can peng. Would you like to peng? (Enter 1 if yes, 0 if no): "
+                    )
+                    yes = int(input())
+                else:  # assume bot will always choose to peng
+                    # yes = random.randint(0, 1)
+                    yes = 1
+                peng = peng and (yes == 1)
+                if peng:
+                    player_number = new_player_number
 
-#         peng, new_player_number = check_for_peng(last_discarded)
-#         if peng:  # assume if can peng always peng
-#             player_number = new_player_number
-#             players[player_number].peng(last_discarded)
-#             last_discarded = players[player_number].discard()
+            chi = check_for_chi(players[player_number].hidden_tiles, last_discarded)
+            if chi:
+                if player_number == 0:
+                    players[player_number].print_player_tiles()
+                    print(
+                        "You can chi. Would you like to chi? (Enter 1 if yes, 0 if no): "
+                    )
+                    yes = int(input())
+                else:  # bot will always choose not to chi because not coded which sequence it will take the tile for
+                    # yes = random.randint(0, 1)
+                    yes = 0
+                chi = chi and (yes == 1)
 
-#         chi = check_for_chi(players[player_number].hidden_tiles, last_discarded)
-#         if chi:
-#             if player_number == 0:
-#                 players[player_number].print_player_tiles()
-#                 print("You can chi. Would you like to chi? (Enter 1 if yes, 0 if no): ")
-#                 yes = int(input())
-#             else:  # bot will always choose not to chi because not coded which sequence it will take the tile for
-#                 # yes = random.randint(0, 1)
-#                 yes = False
-#             chi = chi and (yes == 1)
+            if peng:
+                players[player_number].peng(last_discarded)
+                last_discarded = players[player_number].discard()
 
-#         if not peng and chi:
-#             players[player_number].chi(last_discarded)
-#             last_discarded = players[player_number].discard()
+            if not peng and chi:
+                players[player_number].chi(last_discarded)
+                last_discarded = players[player_number].discard()
 
-#         if not peng and not chi:
-#             if last_discarded == last_discarded:
-#                 discarded_tiles.append(last_discarded)
-#             print("Player" + str(player_number))
-#             new_tile = pickup_tile(all_tiles)
-#             print("You picked up:")
-#             print_tiles([new_tile])
-#             if players[player_number].win(new_tile):
-#                 break
+            if not peng and not chi:
+                if last_discarded == last_discarded:
+                    discarded_tiles.append(last_discarded)
+                print("Player" + str(player_number))
+                new_tile = pickup_tile(all_tiles)
+                print("You picked up:")
+                print_tiles([new_tile])
+                if players[player_number].win(new_tile):
+                    break
 
-#             players[player_number].hidden_tiles.append(new_tile)
-#             players[player_number].print_player_tiles()
-#             last_discarded = players[player_number].discard()
-#         player_number = (player_number + 1) % 4
+                players[player_number].hidden_tiles.append(new_tile)
+                players[player_number].print_player_tiles()
+                last_discarded = players[player_number].discard()
+            player_number = (player_number + 1) % 4
 
-#         print("--------")
-#         print("This tile has been discarded:")
-#         print_tiles([last_discarded])
-#         print("These are all the previously discarded tiles:")
-#         print_tiles(discarded_tiles)
-#         print("--------")
+            print("--------")
+            print("This tile has been discarded:")
+            print_tiles([last_discarded])
+            print("These are all the previously discarded tiles:")
+            print_tiles(discarded_tiles)
+            print("--------")
 
-#     if len(all_tiles) == 0:
-#         print("Nobody won")
+        if len(all_tiles) == 0:
+            print("Nobody won")
 
-# except Exception as e:
-#     print(e)
+    except Exception as e:
+        print(e)
