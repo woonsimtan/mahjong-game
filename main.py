@@ -54,7 +54,7 @@ if __name__ == "__main__":
         if peng:  # BUG:should not be able to peng on tile that user discarded
             player_number = new_player_number
             players[player_number].peng(last_discarded)
-            discarded_tiles.remove(last_discarded)
+            last_discarded = discarded_tiles.pop()
         else:
             peng = False
 
