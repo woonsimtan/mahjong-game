@@ -9,11 +9,12 @@ The game is built using pygame and is semi-functional:
 - we can pick up tiles and discard tiles
 - we can do peng
 - we can win when we have 4 sets of 3 (three of a kind or sequence) and a pair
-\\
 
+<a/>
 Known BUGS:
 - player should not be able to peng on a tile that they discarded themselves
-\\
+
+<a/>
 TODO:
 - chi/gong functionality
 - introduce flowers and animals
