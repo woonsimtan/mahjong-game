@@ -133,7 +133,6 @@ class Player:
     # #     self.displayed_tiles.append([tile, tile, tile, tile])
 
     def win(self, new_tile):
-        # TODO: test this!
         # win by any 4 sets of 3 and a pair
         # know displayed tiles are already sets of 3
         # so only need to check hidden tiles
