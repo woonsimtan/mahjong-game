@@ -64,7 +64,11 @@ if __name__ == "__main__":
             graphics.player_one_graphics(tiles, players[0].displayed_tiles, screen)
             if peng:
                 graphics.generate_buttons(screen, peng, False, False)
-
+                graphics.clear_screen(screen)
+                graphics.comp_graphics(players, screen)
+                graphics.discard_graphics(
+                    screen, discarded_tiles
+                )
                 #
                 # player_number = new_player_number
                 # players[player_number].peng(last_discarded)
