@@ -68,11 +68,12 @@ def discard_graphics(screen, discarded_tiles):
     display_info = pygame.display.Info()
     SCREEN_HEIGHT = display_info.current_h
     SCREEN_WIDTH = display_info.current_w
-    while len(tiles)>0:
+    while len(tiles) > 0:
+        discarded = tiles.pop()
         tile = pygame.image.load(
-            "./mahjong-tiles/" + tiles[-1].suit_type + tiles[-1].value + ".jpg"
+            "./mahjong-tiles/" + discarded.suit_type + discarded.value + ".jpg"
         )
-        discarded = tiles.pop(-1)
+
         tile_width, tile_height = size_values(25.0, 45.0)
         tile = pygame.transform.scale(tile, (tile_width, tile_height))
         # The row and column determined is from the fact that there are 148 Mahjong tiles
@@ -80,7 +81,7 @@ def discard_graphics(screen, discarded_tiles):
         total_row = 8
         total_column = 12
 
-        tile_pos = len(discarded_tiles)-1
+        tile_pos = len(tiles)
         tile_row = tile_pos // total_column
         tile_column = tile_pos % total_column
         margin_left = SCREEN_WIDTH / 2 - (total_column / 2) * tile_width
