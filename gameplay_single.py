@@ -203,7 +203,7 @@ def pickup_tile(all_tiles):
     return all_tiles.pop(0)
 
 
-def check_for_win(discarded_tile):
+def check_for_win(players, discarded_tile):
     if discarded_tile != discarded_tile:
         return False
     for player in players:
@@ -269,7 +269,7 @@ last_discarded = float("NaN")
 if __name__ == "__main__":
     # gameplay for single round
     try:
-        while not check_for_win(last_discarded) and len(all_tiles) > 0:
+        while not check_for_win(players, last_discarded) and len(all_tiles) > 0:
 
             peng, new_player_number = check_for_peng(players, last_discarded)
             if peng:

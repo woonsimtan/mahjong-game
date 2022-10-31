@@ -97,33 +97,6 @@ def comp_graphics(players, screen):
     tile_backing = pygame.image.load("./mahjong-tiles/back.jpg")
     tile_backing = pygame.transform.scale(tile_backing, (tile_width, tile_height))
     tile_backing_sides = pygame.transform.rotate(tile_backing, 90)
-
-    # for i in range(1, 4):
-    #     if i == 2:
-    #         x = SCREEN_WIDTH / 2 - tile_width * 6.5 + j * tile_width
-    #         y = 0
-    #     elif i == 3:
-    #         x = SCREEN_WIDTH - tile_height
-    #         y = SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width
-    #     elif i == 1:
-    #         x = 0
-    #         y = SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width
-
-    #     for hidden in players[i].hidden_tiles:
-    #         if i % 2 == 1:
-    #             screen.blit(tile_backing_sides, (x, y))
-    #         else:
-    #             screen.blit(tile_backing, (x, y))
-
-    #     for displayed in players[i].displayed_tiles:
-    #         tile = pygame.image.load(
-    #             "./mahjong-tiles/" + displayed.suit_type + displayed.value + ".jpg"
-    #         )
-    #         tile = pygame.transform.scale(tile, (tile_width, tile_height))
-    #         if i % 2 == 1:
-    #             tile = pygame.transform.rotate(tile, 90)
-    #         screen.blit(tile, (x, y))
-
     for j in range(13):
         # top row - player 2
         if j < len(players[2].hidden_tiles):
@@ -131,6 +104,7 @@ def comp_graphics(players, screen):
                 tile_backing,
                 (SCREEN_WIDTH / 2 - tile_width * 6.5 + j * tile_width, 0),
             )
+        # elif j - len(players[2].hidden_tiles) < len(players[2].displayed_tiles):
         else:
             displayed = players[2].displayed_tiles[j - len(players[2].hidden_tiles)]
             tile = pygame.image.load(
@@ -151,6 +125,7 @@ def comp_graphics(players, screen):
                 ),
             )
         else:
+            # elif j - len(players[3].hidden_tiles) < len(players[3].displayed_tiles):
             displayed = players[3].displayed_tiles[j - len(players[3].hidden_tiles)]
             tile = pygame.image.load(
                 "./mahjong-tiles/" + displayed.suit_type + displayed.value + ".jpg"
@@ -171,6 +146,7 @@ def comp_graphics(players, screen):
                 (0, SCREEN_HEIGHT / 2 - 6.5 * tile_width + j * tile_width),
             )
         else:
+            # elif j - len(players[1].hidden_tiles) < len(players[1].displayed_tiles):
             displayed = players[1].displayed_tiles[j - len(players[1].hidden_tiles)]
             tile = pygame.image.load(
                 "./mahjong-tiles/" + displayed.suit_type + displayed.value + ".jpg"
@@ -239,7 +215,7 @@ def generate_buttons(screen, peng, gong, chi):
     # Places the text
     peng_button_rect.center = (
         SCREEN_WIDTH - 2 * tile_height,
-        SCREEN_HEIGHT - 2 * tile_height,
+        SCREEN_HEIGHT - 5 * tile_height,
     )
     gong_button_rect.center = (
         SCREEN_WIDTH - 3 * tile_height,

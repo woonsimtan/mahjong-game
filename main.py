@@ -42,22 +42,33 @@ if __name__ == "__main__":
     graphics.comp_graphics(players, screen)
 
     # try:
-    while not gameplay.check_for_win(last_discarded) and len(all_tiles) > 0 and running:
-        # BUG: not terminating on winning hand
+    while (
+        not gameplay.check_for_win(players, last_discarded)
+        and len(all_tiles) > 0
+        and running
+    ):
 
         # check for peng
         peng, new_player_number = gameplay.check_for_peng(players, last_discarded)
         # always assume peng if possible
-        if peng:
+        if peng:  # BUG:should not be able to peng on tile that user discarded
             player_number = new_player_number
             players[player_number].peng(last_discarded)
             discarded_tiles.remove(last_discarded)
+        else:
+            peng = False
 
         if player_number == 0:  # if user
             # display user tiles
             tiles = gameplay.sort_tile_list(players[player_number].hidden_tiles)
             graphics.player_one_graphics(tiles, players[0].displayed_tiles, screen)
             if peng:
+                graphics.generate_buttons(screen, peng, False, False)
+
+                #
+                # player_number = new_player_number
+                # players[player_number].peng(last_discarded)
+                # discarded_tiles.remove(last_discarded)
                 # don't need to pick up new tile
                 new = False
 
@@ -127,6 +138,9 @@ if __name__ == "__main__":
                                 )
                                 player_number = (player_number + 1) % 4
                                 new = True
+
+    if gameplay.check_for_win(players, last_discarded):
+        print("somebody won")
 
     # run out of tiles
     if len(all_tiles) == 0:
